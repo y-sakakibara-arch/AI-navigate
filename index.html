@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIキャリアナビ - 深堀型進路・適職診断</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: "Yu Gothic UI", Meiryo, Arial, sans-serif;
+            background: #f8fbff;
+            color: #102040;
+        }
+        
+        header {
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+        
+        .logo-icon {
+            font-size: 1.8rem;
+        }
+        
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            color: #102040;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 12px;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+        
+        nav a:hover {
+            background: #eef4ff;
+            color: #5b7cfa;
+        }
+        
+        .btn-trial {
+            background: #5b7cfa;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+        
+        .btn-trial:hover {
+            background: #4a6cfa;
+        }
+        
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+        
+        .hero {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 255, 0.95) 100%);
+            border-radius: 16px;
+            margin-bottom: 60px;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #102040;
+        }
+        
+        .hero p {
+            font-size: 1.2rem;
+            color: #2a3a5e;
+            margin-bottom: 30px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #5b7cfa 0%, #7f9cff 100%);
+            color: white;
+            padding: 16px 32px;
+            border-radius: 999px;
+            border: none;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.3s;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            text-align: center;
+        }
+        
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 12px;
+            color: #5b7cfa;
+        }
+        
+        .feature-card p {
+            color: #2a3a5e;
+            line-height: 1.6;
+        }
+        
+        .trial-section {
+            background: linear-gradient(135deg, #5b7cfa 0%, #7f9cff 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 16px;
+            margin-top: 60px;
+        }
+        
+        .trial-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+        
+        .trial-section p {
+            font-size: 1.1rem;
+            margin-bottom: 30px;
+        }
+        
+        footer {
+            background: #102040;
+            color: white;
+            text-align: center;
+            padding: 40px 20px;
+            margin-top: 60px;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav {
+                justify-content: center;
+                width: 100%;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-primary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">🧠</div>
+                <div>AIキャリアナビ</div>
+            </div>
+            <nav>
+                <a href="#home">ホーム</a>
+                <a href="#features">サービス</a>
+                <a href="#trial">体験版1</a>
+                <a href="create4.html">デモページ</a>
+                <button class="btn-trial">無料体験</button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero" id="home">
+            <h1>AIと対話しながら、<br>あなたの本質を丁寧に見つける。</h1>
+            <p>大学・学部選びから、就職・転職、企業・部署移動、そして趣味・ライフスタイルまで。AIがあなたと丁寧に対話して最適な進路を提案します。</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="alert('体験版へようこそ！')">まずは体験を始める</button>
+                <button class="btn-primary" onclick="location.href='create4.html'" style="background: white; color: #5b7cfa;">詳しく見る</button>
+            </div>
+        </section>
+
+        <section id="features">
+            <h2 style="text-align: center; font-size: 2.2rem; margin-bottom: 40px; color: #102040;">サービス内容</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <h3>🎓 大学・学部診断</h3>
+                    <p>高校生・大学生向け。好きな教科・興味・将来像から、向いている学部・学科を提案します。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>💼 就職・転職適職診断</h3>
+                    <p>社会人向け。過去の経験・価値観から、向いている職種・業界を分析します。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏢 企業内適任診断</h3>
+                    <p>会社員向け。今の部署の適性や異動先を診断します。</p>
+                </div>
+                <div class="feature-card">
+                    <h3>❤️ ライフスタイル提案</h3>
+                    <p>一般ユーザー向け。自分に合う趣味・副業・学び直しを提案します。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="trial-section" id="trial">
+            <h2>月額500円から始める自己理解の旅</h2>
+            <p>初回7日間無料体験で、AIとの対話を体験してください。</p>
+            <button class="btn-primary" style="background: white; color: #5b7cfa; cursor: pointer;" onclick="alert('体験版の申し込みをありがとうございます！')">今すぐ無料体験を申し込む</button>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 AIキャリアナビ All rights reserved.</p>
+    </footer>
+</body>
+</html>

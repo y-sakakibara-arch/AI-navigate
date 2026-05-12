@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>適職診断システム - キャリアコンサルティング</title>
+    <style>
+        :root {
+            --primary: #1a365d;
+            --primary-dark: #0f1419;
+            --secondary: #2d3748;
+            --accent: #3182ce;
+            --success: #38a169;
+            --warning: #d69e2e;
+            --bg: #f7fafc;
+            --surface: #ffffff;
+            --surface-alt: #f8fafc;
+            --text: #1a202c;
+            --text-light: #4a5568;
+            --text-muted: #718096;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', 'Yu Gothic UI', Meiryo, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: var(--surface);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+        }
+        .topbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: var(--primary);
+        }
+        .brand-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            display: grid;
+            place-items: center;
+            font-size: 1.4rem;
+        }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 24px;
+        }
+        .hero {
+            text-align: center;
+            padding: 80px 0 60px;
+            background: linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%);
+        }
+        .hero-title {
+            font-size: 3.2rem;
+            font-weight: 800;
+            margin: 0 0 20px 0;
+            color: var(--primary);
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+        }
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin: 0 0 16px 0;
+            font-weight: 500;
+        }
+        .hero-description {
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            margin: 0;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            margin-top: 40px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin: 4px 0 0 0;
+            font-weight: 500;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+        }
+        .card h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin: 0 0 32px 0;
+            color: var(--primary);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 12px;
+        }
+        .questions {
+            display: grid;
+            gap: 24px;
+        }
+        .question-block {
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 32px;
+        }
+        .question-block:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .question-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+        }
+        .question-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            color: var(--text);
+            line-height: 1.5;
+        }
+        .option-group {
+            display: grid;
+            gap: 10px;
+        }
+        .radio-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            padding: 16px;
+            border-radius: 8px;
+            transition: all .2s ease;
+            border: 2px solid transparent;
+        }
+        .radio-option:hover {
+            background: rgba(26, 54, 93, 0.05);
+            border-color: rgba(26, 54, 93, 0.1);
+        }
+        .radio-option.selected {
+            background: rgba(49, 130, 206, 0.08);
+            border-color: var(--accent);
+        }
+        .radio-option input {
+            cursor: pointer;
+            accent-color: var(--primary);
+            margin-top: 2px;
+        }
+        .radio-option label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            margin: 0;
+            line-height: 1.5;
+            color: var(--text);
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            padding: 16px 32px;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all .2s ease;
+            margin-top: 32px;
+            width: 100%;
+            box-shadow: var(--shadow);
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+            box-shadow: 0 12px 24px rgba(74, 124, 158, 0.25);
+        }
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .result-area {
+            display: none;
+        }
+        .result-area.active {
+            display: block;
+        }
+        .result-content {
+            display: grid;
+            gap: 24px;
+        }
+        .result-header {
+            text-align: center;
+            padding: 40px 0;
+            border-bottom: 3px solid var(--primary);
+            margin-bottom: 40px;
+        }
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 16px;
+        }
+        .result-type {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 0;
+        }
+        .result-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin: 8px 0 0 0;
+        }
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+        .result-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+        }
+        .result-card h3 {
+            margin: 0 0 16px 0;
+            color: var(--primary);
+            font-size: 1.2rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .result-card p {
+            margin: 0;
+            color: var(--text-light);
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+        .recommendations {
+            display: grid;
+            gap: 16px;
+        }
+        .recommendation-item {
+            background: var(--surface-alt);
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid var(--accent);
+            transition: transform .2s ease;
+        }
+        .recommendation-item:hover {
+            transform: translateX(4px);
+        }
+        .recommendation-item h4 {
+            margin: 0 0 8px 0;
+            color: var(--text);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .recommendation-item p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 4px;
+            background: var(--border);
+            border-radius: 2px;
+            margin-bottom: 32px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 2px;
+            transition: width .3s ease;
+        }
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 40px 32px;
+            margin-top: 80px;
+        }
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+        }
+        .footer-section h4 {
+            margin: 0 0 16px 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        .footer-section p {
+            margin: 0 0 12px 0;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            margin-top: 32px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+        @media(max-width: 1024px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .result-grid {
+                grid-template-columns: 1fr;
+            }
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media(max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            .stats {
+                flex-direction: column;
+                gap: 24px;
+            }
+            .card {
+                padding: 24px;
+            }
+            .topbar {
+                padding: 16px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="topbar">
+            <a class="brand" href="#">
+                <span class="brand-icon">🎯</span>
+                <span>適職診断システム</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#about">サービス概要</a>
+                <a href="#test">診断テスト</a>
+                <a href="#contact">お問い合わせ</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1 class="hero-title">適職診断システム</h1>
+            <p class="hero-subtitle">科学的なアプローチであなたの最適なキャリアパスを特定</p>
+            <p class="hero-description">10問の精密な性格診断により、あなたの強み・適性・最適な職種・部署を分析。企業人事・キャリアカウンセリングに活用できるプロフェッショナルツールです。</p>
+            <div class="stats">
+                <div class="stat-item">
+                    <div class="stat-number">10,000+</div>
+                    <div class="stat-label">診断実施数</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">95%</div>
+                    <div class="stat-label">満足度</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">企業導入実績</div>
+                </div>
+            </div>
+        </section>
+
+        <div class="container">
+            <!-- 診断テストカード -->
+            <div class="card test-card">
+                <h2>精密性格診断テスト</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+                </div>
+                <div id="test-form">
+                    <div class="questions" id="questions-container"></div>
+                    <button class="btn" onclick="submitTest()">診断結果を見る</button>
+                </div>
+            </div>
+
+            <!-- 結果カード -->
+            <div class="card result-card">
+                <div class="result-area" id="result-area">
+                    <div class="result-header">
+                        <div class="result-badge">📊 診断結果</div>
+                        <h3 class="result-type" id="result-type">-</h3>
+                        <p class="result-description" id="result-description">-</p>
+                    </div>
+
+                    <div class="result-grid">
+                        <div class="result-card">
+                            <h3>🎯 最適職種</h3>
+                            <p id="result-career">-</p>
+                        </div>
+
+                        <div class="result-card">
+                            <h3>💪 あなたの強み</h3>
+                            <p id="result-strength">-</p>
+                        </div>
+
+                        <div class="result-card">
+                            <h3>⚠️ 注意点</h3>
+                            <p id="result-caution">-</p>
+                        </div>
+
+                        <div class="result-card">
+                            <h3>📈 キャリアアドバイス</h3>
+                            <p id="result-advice">-</p>
+                        </div>
+                    </div>
+                            <p id="result-strength">-</p>
+                        </div>
+
+                        <div class="result-card">
+                            <h3>⚠️ 気をつけるポイント</h3>
+                            <p id="result-caution">-</p>
+                    </div>
+
+                    <div>
+                        <h3 style="color: var(--primary); margin: 0 0 20px 0; font-size: 1.3rem;">推奨部署・職種</h3>
+                        <div class="recommendations" id="result-departments"></div>
+                    </div>
+
+                    <button class="btn btn-reset" onclick="resetTest()">再度診断する</button>
+                </div>
+
+                <div id="intro-area" style="text-align: center; color: var(--text-light);">
+                    <p>テストを開始すると、結果がここに表示されます。</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>適職診断システム</h4>
+                <p>科学的な性格分析により、最適なキャリアパスを提案するプロフェッショナルツールです。</p>
+            </div>
+            <div class="footer-section">
+                <h4>サービス特徴</h4>
+                <p>10問の精密診断で6つのキャリアタイプを特定。企業の人事・採用・キャリア開発に活用いただけます。</p>
+            </div>
+            <div class="footer-section">
+                <h4>お問い合わせ</h4>
+                <p>企業導入・カスタマイズに関するお問い合わせは、こちらからご連絡ください。</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            適職診断システム © 2026 | プロフェッショナルキャリアコンサルティングツール
+        </div>
+    </footer>
+
+    <script>
+        const questions = [
+            {
+                question: "人間関係について、あなたは？",
+                options: [
+                    { text: "多くの人と関わり、コミュニケーション中心", score: { creative: 2, leader: 2, people: 3 } },
+                    { text: "一人で集中した作業が好き", score: { analytical: 3, expert: 3, solo: 3 } },
+                    { text: "バランスよく両方できる", score: { balanced: 2, people: 1, analytical: 1 } }
+                ]
+            },
+            {
+                question: "仕事のスタイルとして魅力を感じるのは？",
+                options: [
+                    { text: "新しいアイデアを形にする", score: { creative: 3, leader: 1 } },
+                    { text: "データ分析・問題解決", score: { analytical: 3, expert: 2 } },
+                    { text: "チーム目標の達成", score: { leader: 2, people: 2 } }
+                ]
+            },
+            {
+                question: "モチベーションの源は？",
+                options: [
+                    { text: "成長・新しいチャレンジ", score: { creative: 2, leader: 2, growth: 3 } },
+                    { text: "安定・確実性", score: { analytical: 2, expert: 2, stable: 3 } },
+                    { text: "社会貢献・人への関わり", score: { people: 3, supporter: 2 } }
+                ]
+            },
+            {
+                question: "リーダーシップについて、当てはまるのは？",
+                options: [
+                    { text: "自分がリーダーとなって牽引したい", score: { leader: 3, creative: 1 } },
+                    { text: "チームの一員としてサポート", score: { supporter: 3, people: 1 } },
+                    { text: "どちらでもない・場況による", score: { balanced: 2 } }
+                ]
+            },
+            {
+                question: "仕事のペースについて？",
+                options: [
+                    { text: "スピード重視、常に新しい課題", score: { creative: 2, leader: 1, dynamic: 3 } },
+                    { text: "丁寧・正確・計画的", score: { analytical: 2, expert: 2, careful: 3 } },
+                    { text: "状況に応じて柔軟に", score: { balanced: 2 } }
+                ]
+            },
+            {
+                question: "ストレス解消法は？",
+                options: [
+                    { text: "新しい体験・刺激を求める", score: { creative: 1, dynamic: 2 } },
+                    { text: "落ち着いた環境での個人活動", score: { analytical: 1, solo: 2 } },
+                    { text: "友人や家族との時間", score: { people: 2, supporter: 1 } }
+                ]
+            },
+            {
+                question: "キャリアの理想は？",
+                options: [
+                    { text: "専門性を極める", score: { expert: 3, analytical: 1 } },
+                    { text: "多様な経験を積む", score: { creative: 2, balanced: 1 } },
+                    { text: "チームや組織に貢献", score: { people: 2, supporter: 1 } }
+                ]
+            },
+            {
+                question: "仕事で最も大切だと思うことは？",
+                options: [
+                    { text: "創造性・イノベーション", score: { creative: 3, leader: 1 } },
+                    { text: "質の高さ・正確性", score: { analytical: 2, expert: 2 } },
+                    { text: "人間関係・チームワーク", score: { people: 2, supporter: 2 } }
+                ]
+            },
+            {
+                question: "困難な状況での対応は？",
+                options: [
+                    { text: "新しい視点や方法を試す", score: { creative: 2, dynamic: 2 } },
+                    { text: "過去のデータやルールに基づいて判断", score: { analytical: 2, expert: 1 } },
+                    { text: "周囲に相談・協力を求める", score: { people: 2, supporter: 1 } }
+                ]
+            },
+            {
+                question: "理想の職場環境は？",
+                options: [
+                    { text: "自由度が高く、チャレンジできる", score: { creative: 2, leader: 1 } },
+                    { text: "体系的で、ルールが明確", score: { analytical: 2, expert: 1 } },
+                    { text: "温かい人間関係、サポートが充実", score: { people: 2, supporter: 2 } }
+                ]
+            }
+        ];
+
+        const careers = {
+            leader: {
+                name: "リーダー・マネジメント型",
+                career: "マネージャー・事業部長・プロジェクトリーダー",
+                departments: [
+                    { name: "営業部", desc: "組織目標の達成に向けてチームを牽引" },
+                    { name: "企画部", desc: "新規プロジェクトの立案・推進" },
+                    { name: "経営企画", desc: "会社全体の戦略設定・実行" }
+                ],
+                strength: "決断力・指導力・組織をまとめる力",
+                caution: "チームメンバーの意見も聞く・細かい確認を忘れずに"
+            },
+            creative: {
+                name: "クリエイティブ・企画型",
+                career: "企画担当・プロダクトデザイナー・マーケッター",
+                departments: [
+                    { name: "企画・商品開発", desc: "新しい商品やサービスの企画" },
+                    { name: "マーケティング", desc: "顧客ニーズの発掘と新規戦略の立案" },
+                    { name: "デザイン", desc: "ユーザー視点での創意工夫" }
+                ],
+                strength: "創造性・柔軟な思考・新しいアイデア",
+                caution: "実現性・コスト管理も重要・詳細な詰めを大事に"
+            },
+            analytical: {
+                name: "分析・問題解決型",
+                career: "経営分析・データサイエンティスト・システムエンジニア",
+                departments: [
+                    { name: "経営管理", desc: "経営データの分析・経営判断のサポート" },
+                    { name: "IT・システム", desc: "システム設計・問題解決" },
+                    { name: "品質管理", desc: "正確性・安全性の確保" }
+                ],
+                strength: "論理的思考・問題解決力・正確性",
+                caution: "スピード感も必要・完璧を目指しすぎない工夫"
+            },
+            people: {
+                name: "対人・コミュニケーション型",
+                career: "営業・人事・カウンセラー・顧客対応",
+                departments: [
+                    { name: "営業部", desc: "顧客との関係構築・ニーズ把握" },
+                    { name: "人事部", desc: "採用・育成・従業員支援" },
+                    { name: "カスタマーサクセス", desc: "顧客満足度向上のサポート" }
+                ],
+                strength: "コミュニケーション力・共感力・信頼構築",
+                caution: "データや数字も意識する・感情だけで判断しない"
+            },
+            expert: {
+                name: "専門家・スペシャリスト型",
+                career: "技術者・研究開発・エキスパートコンサルタント",
+                departments: [
+                    { name: "研究開発", desc: "専門分野を深掘りする研究" },
+                    { name: "技術部門", desc: "高度な技術・専門知識の活用" },
+                    { name: "コンサルティング", desc: "専門知識での課題解決" }
+                ],
+                strength: "深い専門知識・技術力・こだわり",
+                caution: "他分野の理解も大事・コミュニケーションを工夫する"
+            },
+            supporter: {
+                name: "サポート・協力型",
+                career: "事務・サポート職・コーディネーター",
+                departments: [
+                    { name: "事務・管理部門", desc: "組織運営のバックアップ" },
+                    { name: "人事サポート", desc: "採用事務・給与管理など" },
+                    { name: "営業事務", desc: "営業チームのサポート業務" }
+                ],
+                strength: "きめ細かさ・サポート力・チームへの貢献",
+                caution: "自分の価値を認識する・キャリア形成も意識的に"
+            }
+        };
+
+        function initTest() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+            document.getElementById('progress-fill').style.width = '0%';
+            questions.forEach((q, index) => {
+                const block = document.createElement('div');
+                block.className = 'question-block';
+                block.innerHTML = `
+                    <div class="question-number">${index + 1}</div>
+                    <div class="question-title">${q.question}</div>
+                    <div class="option-group">
+                        ${q.options.map((opt, optIdx) => `
+                            <label class="radio-option">
+                                <input type="radio" name="q${index}" value="${optIdx}" />
+                                <span>${opt.text}</span>
+                            </label>
+                        `).join('')}
+                    </div>
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        function submitTest() {
+            const scores = {};
+            let answered = 0;
+
+            for (let i = 0; i < questions.length; i++) {
+                const selected = document.querySelector(`input[name="q${i}"]:checked`);
+                if (selected) {
+                    answered++;
+                    const optIdx = parseInt(selected.value);
+                    const scoreObj = questions[i].options[optIdx].score;
+                    Object.entries(scoreObj).forEach(([key, val]) => {
+                        scores[key] = (scores[key] || 0) + val;
+                    });
+                }
+            }
+
+            if (answered < questions.length) {
+                alert('すべての質問に答えてください');
+                return;
+            }
+
+            const topType = Object.keys(scores).reduce((a, b) => scores[a] > scores[b] ? a : b);
+            const career = careers[topType] || careers.balanced;
+
+            document.getElementById('intro-area').style.display = 'none';
+            document.getElementById('result-area').classList.add('active');
+            document.getElementById('progress-fill').style.width = '100%';
+            document.getElementById('result-type').textContent = career.name;
+            document.getElementById('result-career').textContent = career.career;
+            document.getElementById('result-strength').textContent = career.strength;
+            document.getElementById('result-caution').textContent = career.caution;
+
+            const deptHtml = career.departments.map(d => 
+                `<div class="recommendation-item"><h4>${d.name}</h4><p>${d.desc}</p></div>`
+            ).join('');
+            document.getElementById('result-departments').innerHTML = deptHtml;
+        }
+
+        function resetTest() {
+            document.getElementById('intro-area').style.display = 'block';
+            document.getElementById('result-area').classList.remove('active');
+            document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+        }
+
+        window.addEventListener('DOMContentLoaded', initTest);
+    </script>
+</body>
+</html>

@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>法人・教育機関向け | AIキャリアナビ</title>
+    <style>
+        :root {
+            --navy: #0f2747;
+            --navy-2: #1d3b63;
+            --blue: #2f6bff;
+            --blue-2: #5b8cff;
+            --sky: #eaf2ff;
+            --line: #d9e4f5;
+            --text: #243b59;
+            --muted: #5d7390;
+            --white: #ffffff;
+            --bg: #f4f8fd;
+            --shadow: 0 20px 50px rgba(15, 39, 71, 0.08);
+            --radius: 24px;
+            --max: 1180px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Yu Gothic UI", Meiryo, "Helvetica Neue", Arial, sans-serif;
+            color: var(--text);
+            background:
+                linear-gradient(180deg, #f7fbff 0%, #f2f7fc 100%);
+            line-height: 1.75;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        .container {
+            width: min(var(--max), calc(100% - 40px));
+            margin: 0 auto;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(15, 39, 71, 0.08);
+            box-shadow: 0 6px 24px rgba(15, 39, 71, 0.04);
+        }
+
+        .header-container {
+            width: min(var(--max), calc(100% - 40px));
+            margin: 0 auto;
+            min-height: 82px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 14px;
+            text-decoration: none;
+            color: var(--navy);
+        }
+
+        .logo-mark {
+            width: 54px;
+            height: 54px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #16345b 0%, #29538a 100%);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 18px 35px rgba(22, 52, 91, 0.22);
+            flex-shrink: 0;
+        }
+
+        .logo-mark svg {
+            width: 30px;
+            height: 30px;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.1;
+        }
+
+        .logo-sub {
+            font-size: 0.68rem;
+            font-weight: 800;
+            letter-spacing: 0.16em;
+            color: #6a809f;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .logo-main {
+            font-size: 1.1rem;
+            font-weight: 900;
+            letter-spacing: -0.02em;
+            color: var(--navy);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #294364;
+            transition: color 0.25s ease;
+        }
+
+        nav a:hover {
+            color: var(--blue);
+        }
+
+        .btn-header {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 20px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: white !important;
+            box-shadow: 0 16px 30px rgba(15, 39, 71, 0.18);
+        }
+
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 150px 0 92px;
+            background:
+                radial-gradient(circle at top right, rgba(47, 107, 255, 0.09), transparent 24%),
+                linear-gradient(135deg, #f8fbff 0%, #eef4fb 100%);
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            right: -180px;
+            top: -80px;
+            width: 520px;
+            height: 520px;
+            background: radial-gradient(circle, rgba(47,107,255,0.10) 0%, rgba(47,107,255,0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+        }
+
+        .hero-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #eaf2ff;
+            color: var(--blue);
+            font-size: 0.84rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.4rem, 5vw, 4.6rem);
+            line-height: 1.12;
+            letter-spacing: -0.045em;
+            color: var(--navy);
+            margin-bottom: 22px;
+            font-weight: 900;
+        }
+
+        .hero p {
+            max-width: 660px;
+            font-size: 1.06rem;
+            color: var(--muted);
+            margin-bottom: 30px;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+            margin-bottom: 28px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            padding: 0 24px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 900;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-primary {
+            background: var(--navy);
+            color: white;
+            box-shadow: 0 16px 32px rgba(15, 39, 71, 0.18);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--navy);
+            border: 1px solid var(--line);
+            box-shadow: 0 10px 24px rgba(15, 39, 71, 0.06);
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover,
+        .btn-header:hover {
+            transform: translateY(-2px);
+        }
+
+        .hero-points {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .hero-points span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid #e1eaf7;
+            color: #38506f;
+            font-weight: 700;
+            font-size: 0.92rem;
+        }
+
+        .hero-points span::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--blue);
+        }
+
+        .hero-panel {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+        }
+
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+        }
+
+        .panel-title {
+            font-size: 1rem;
+            font-weight: 900;
+            color: var(--navy);
+        }
+
+        .panel-badge {
+            font-size: 0.78rem;
+            font-weight: 900;
+            color: var(--blue);
+            background: #eaf2ff;
+            padding: 7px 12px;
+            border-radius: 999px;
+        }
+
+        .panel-list {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .panel-list li {
+            padding: 14px 16px;
+            background: #f8fbff;
+            border: 1px solid #e6eef9;
+            border-radius: 16px;
+            color: #3a5273;
+            font-size: 0.95rem;
+        }
+
+        .panel-list strong {
+            color: var(--navy);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .stats {
+            padding: 22px 0 0;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .stat-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            box-shadow: 0 10px 24px rgba(15, 39, 71, 0.05);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-card strong {
+            display: block;
+            font-size: 1.8rem;
+            line-height: 1;
+            color: var(--navy);
+            margin-bottom: 10px;
+        }
+
+        .stat-card span {
+            color: var(--muted);
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+
+        .section {
+            padding: 86px 0;
+        }
+
+        .section-white {
+            background: white;
+            border-top: 1px solid rgba(15, 39, 71, 0.05);
+            border-bottom: 1px solid rgba(15, 39, 71, 0.05);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 42px;
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
+            line-height: 1.15;
+            letter-spacing: -0.04em;
+            color: var(--navy);
+            margin-bottom: 14px;
+            font-weight: 900;
+        }
+
+        .section-title p {
+            max-width: 720px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 1.03rem;
+        }
+
+        .usecase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 26px;
+        }
+
+        .usecase-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 34px;
+        }
+
+        .usecase-label {
+            display: inline-flex;
+            margin-bottom: 16px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #eff5ff;
+            color: var(--blue);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .usecase-card h3 {
+            font-size: 1.65rem;
+            color: var(--navy);
+            margin-bottom: 12px;
+            font-weight: 900;
+        }
+
+        .usecase-card p {
+            color: var(--muted);
+            margin-bottom: 18px;
+        }
+
+        .check-list {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .check-list li {
+            position: relative;
+            padding-left: 28px;
+            color: #36506f;
+        }
+
+        .check-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            top: 0;
+            color: var(--blue);
+            font-weight: 900;
+        }
+
+        .flow-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .flow-card {
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            padding: 28px 22px;
+            box-shadow: 0 10px 22px rgba(15, 39, 71, 0.05);
+        }
+
+        .flow-number {
+            width: 42px;
+            height: 42px;
+            display: inline-grid;
+            place-items: center;
+            border-radius: 50%;
+            background: var(--navy);
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 900;
+            margin-bottom: 16px;
+        }
+
+        .flow-card h3 {
+            color: var(--navy);
+            margin-bottom: 10px;
+            font-size: 1.06rem;
+            font-weight: 900;
+        }
+
+        .flow-card p {
+            color: var(--muted);
+            font-size: 0.94rem;
+        }
+
+        .pricing-band {
+            background: linear-gradient(135deg, #102a4c 0%, #173861 100%);
+            color: white;
+        }
+
+        .pricing-band .section-title h2,
+        .pricing-band .section-title p {
+            color: white;
+        }
+
+        .pricing-band .section-title p {
+            opacity: 0.88;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 26px;
+            align-items: stretch;
+        }
+
+        .price-card {
+            position: relative;
+            background: white;
+            color: var(--text);
+            border-radius: 26px;
+            padding: 34px 28px;
+            box-shadow: 0 22px 50px rgba(0, 0, 0, 0.18);
+        }
+
+        .price-card.featured {
+            transform: translateY(-8px);
+            border: 2px solid rgba(91, 140, 255, 0.4);
+        }
+
+        .price-card.featured::after {
+            content: "おすすめ";
+            position: absolute;
+            top: 18px;
+            right: 18px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: #eaf2ff;
+            color: var(--blue);
+            font-size: 0.78rem;
+            font-weight: 900;
+        }
+
+        .price-card h3 {
+            color: var(--navy);
+            font-size: 1.3rem;
+            font-weight: 900;
+            margin-bottom: 12px;
+        }
+
+        .price-main {
+            font-size: 2rem;
+            font-weight: 900;
+            color: var(--navy);
+            letter-spacing: -0.03em;
+            margin-bottom: 6px;
+        }
+
+        .price-sub {
+            color: var(--muted);
+            font-size: 0.93rem;
+            font-weight: 700;
+            margin-bottom: 22px;
+        }
+
+        .price-list {
+            list-style: none;
+            display: grid;
+            gap: 12px;
+        }
+
+        .price-list li {
+            position: relative;
+            padding: 12px 12px 12px 38px;
+            background: #f8fbff;
+            border: 1px solid #e7eef9;
+            border-radius: 14px;
+            color: #36506f;
+            font-size: 0.94rem;
+        }
+
+        .price-list li::before {
+            content: "✓";
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--blue);
+            font-weight: 900;
+        }
+
+        .note-box {
+            margin-top: 32px;
+            padding: 22px 24px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.92);
+            text-align: center;
+            font-size: 0.96rem;
+            font-weight: 700;
+        }
+
+        .contact-card {
+            max-width: 860px;
+            margin: 0 auto;
+            background: white;
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            padding: 42px 34px;
+            text-align: center;
+        }
+
+        .contact-card h2 {
+            font-size: clamp(2rem, 4vw, 2.7rem);
+            color: var(--navy);
+            margin-bottom: 12px;
+            font-weight: 900;
+        }
+
+        .contact-card p {
+            color: var(--muted);
+        }
+
+        .contact-tel {
+            display: inline-flex;
+            margin: 18px 0 18px;
+            padding: 16px 28px;
+            border-radius: 999px;
+            background: var(--navy);
+            color: white;
+            font-size: clamp(1.35rem, 4vw, 2.1rem);
+            font-weight: 900;
+            letter-spacing: 0.05em;
+            box-shadow: 0 18px 36px rgba(15, 39, 71, 0.16);
+        }
+
+        .footer {
+            padding: 40px 0 48px;
+            text-align: center;
+            color: #69809c;
+            font-size: 0.93rem;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(42px);
+            transition: opacity 1.4s ease, transform 1.4s ease;
+        }
+
+        .fade-in.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1024px) {
+            .hero-grid,
+            .usecase-grid,
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .flow-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .price-card.featured {
+                transform: none;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .header-container {
+                min-height: 74px;
+            }
+
+            nav {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 130px;
+            }
+
+            .stats-grid,
+            .flow-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-panel,
+            .usecase-card,
+            .flow-card,
+            .price-card,
+            .contact-card {
+                padding: 24px 20px;
+            }
+
+            .container,
+            .header-container {
+                width: min(var(--max), calc(100% - 24px));
+            }
+
+            .logo-main {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body id="top">
+    <header>
+        <div class="header-container">
+            <a class="logo" href="create4.html">
+                <span class="logo-mark" aria-hidden="true">
+                    <svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="18" cy="18" r="5" fill="white"/>
+                        <circle cx="46" cy="18" r="5" fill="white"/>
+                        <circle cx="18" cy="46" r="5" fill="white"/>
+                        <circle cx="46" cy="46" r="5" fill="white"/>
+                        <circle cx="32" cy="32" r="6" fill="#9CC0FF"/>
+                        <path d="M22 20L28 28M42 20L36 28M22 44L28 36M42 44L36 36M23 18H41M23 46H41M18 23V41M46 23V41" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                    </svg>
+                </span>
+                <span class="logo-text">
+                    <span class="logo-sub">AI CAREER NAVI</span>
+                    <span class="logo-main">AIキャリアナビ</span>
+                </span>
+            </a>
+
+            <nav>
+                <a href="create4.html">個人向け</a>
+                <a href="#usecase">活用シーン</a>
+                <a href="#pricing">法人料金</a>
+                <a href="#contact">お問い合わせ</a>
+                <a href="https://chat.openai.com/" target="_blank" class="btn-header">無料相談</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-copy">
+                <span class="eyebrow">For Business & Education</span>
+                <h1>AIとの対話で、社員・学生の適性と可能性を見える化する。</h1>
+                <p>
+                    企業の人材配置・育成、学校の進路指導・キャリア教育に。
+                    長文対話型AIが、一人ひとりの価値観・強み・適性を整理し、
+                    面談や指導の質を高めます。
+                </p>
+
+                <div class="hero-actions">
+                    <a href="#pricing" class="btn-primary">法人料金を見る</a>
+                    <a href="#contact" class="btn-secondary">お問い合わせ</a>
+                </div>
+
+                <div class="hero-points">
+                    <span>人材配置・育成に活用</span>
+                    <span>進路指導・キャリア教育に対応</span>
+                    <span>少人数から導入しやすい</span>
+                </div>
+            </div>
+
+            <div class="hero-panel">
+                <div class="panel-head">
+                    <span class="panel-title">導入イメージ</span>
+                    <span class="panel-badge">企業・学校向け</span>
+                </div>
+                <ul class="panel-list">
+                    <li><strong>企業様向け</strong> 1on1面談・適性把握・配置検討の参考データとして活用</li>
+                    <li><strong>教育機関向け</strong> 進路相談前の自己分析や志望理由書の方向性整理を支援</li>
+                    <li><strong>管理者向け</strong> 対話結果をレポート化し、育成や指導の質を向上</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container stats">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <strong>企業</strong>
+                    <span>人材育成・配置最適化をサポート</span>
+                </div>
+                <div class="stat-card">
+                    <strong>教育</strong>
+                    <span>進路相談・キャリア教育に活用</span>
+                </div>
+                <div class="stat-card">
+                    <strong>対話型AI</strong>
+                    <span>本人の言葉を深く引き出す診断体験</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section section-white fade-in" id="usecase">
+        <div class="container">
+            <div class="section-title">
+                <h2>企業にも、教育現場にも使える深掘り診断</h2>
+                <p>アンケート形式だけでは拾いきれない本人の言葉を、AIが丁寧に引き出します。</p>
+            </div>
+
+            <div class="usecase-grid">
+                <article class="usecase-card">
+                    <span class="usecase-label">For Business</span>
+                    <h3>企業様向け</h3>
+                    <p>
+                        社員の強み、価値観、向いている業務、今後伸ばしたい能力を整理。
+                        1on1面談、人材配置、若手育成、部署異動の参考資料として活用できます。
+                    </p>
+                    <ul class="check-list">
+                        <li>社員の適性・強みの可視化</li>
+                        <li>部署配置・異動検討の補助</li>
+                        <li>キャリア面談・1on1の質向上</li>
+                        <li>若手社員の育成方針づくり</li>
+                    </ul>
+                </article>
+
+                <article class="usecase-card">
+                    <span class="usecase-label">For Education</span>
+                    <h3>教育機関向け</h3>
+                    <p>
+                        生徒・学生の興味、得意分野、将来像をAIとの対話で整理。
+                        進路相談、学部学科選び、キャリア教育の補助ツールとして活用できます。
+                    </p>
+                    <ul class="check-list">
+                        <li>進路相談前の自己分析</li>
+                        <li>学部・学科選びの参考資料</li>
+                        <li>キャリア教育授業での活用</li>
+                        <li>志望理由書作成の方向性整理</li>
+                    </ul>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-in">
+        <div class="container">
+            <div class="section-title">
+                <h2>導入後の流れ</h2>
+                <p>大がかりなシステム導入ではなく、まずは小規模な利用から始められます。</p>
+            </div>
+
+            <div class="flow-grid">
+                <div class="flow-card">
+                    <span class="flow-number">1</span>
+                    <h3>対象者を決める</h3>
+                    <p>社員・学生・新入社員・就活生など、利用対象を決めます。</p>
+                </div>
+                <div class="flow-card">
+                    <span class="flow-number">2</span>
+                    <h3>AI診断を実施</h3>
+                    <p>対象者がAIと対話し、価値観や適性を深掘りします。</p>
+                </div>
+                <div class="flow-card">
+                    <span class="flow-number">3</span>
+                    <h3>レポート化</h3>
+                    <p>強み・向いている方向性・注意点を整理します。</p>
+                </div>
+                <div class="flow-card">
+                    <span class="flow-number">4</span>
+                    <h3>面談・指導に活用</h3>
+                    <p>人材育成、配置、進路指導の参考資料として使います。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section pricing-band fade-in" id="pricing">
+        <div class="container">
+            <div class="section-title">
+                <h2>法人契約料金</h2>
+                <p>利用人数に合わせて選べる法人・教育機関向けプランです。</p>
+            </div>
+
+            <div class="pricing-grid">
+                <div class="price-card">
+                    <h3>ライト法人プラン</h3>
+                    <div class="price-main">月額 9,800円</div>
+                    <div class="price-sub">目安：〜20名まで</div>
+                    <ul class="price-list">
+                        <li>月20名まで診断利用</li>
+                        <li>基本診断レポート</li>
+                        <li>メールサポート</li>
+                        <li>小規模チーム・クラス向け</li>
+                    </ul>
+                </div>
+
+                <div class="price-card featured">
+                    <h3>スタンダード法人プラン</h3>
+                    <div class="price-main">月額 29,800円</div>
+                    <div class="price-sub">目安：〜100名まで</div>
+                    <ul class="price-list">
+                        <li>月100名まで診断利用</li>
+                        <li>詳細診断レポート</li>
+                        <li>管理者向け集計レポート</li>
+                        <li>企業研修・学校利用におすすめ</li>
+                    </ul>
+                </div>
+
+                <div class="price-card">
+                    <h3>プレミアム法人プラン</h3>
+                    <div class="price-main">月額 79,800円〜</div>
+                    <div class="price-sub">目安：101名以上</div>
+                    <ul class="price-list">
+                        <li>大人数利用に対応</li>
+                        <li>個別カスタマイズ相談</li>
+                        <li>部署別・学年別の分析</li>
+                        <li>導入支援・活用提案</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="note-box">
+                ※料金はサイト表示用の参考例です。実際の契約では、利用人数・診断回数・レポート内容に応じて個別見積もりにするのがおすすめです。
+            </div>
+        </div>
+    </section>
+
+    <section class="section fade-in" id="contact">
+        <div class="container">
+            <div class="contact-card">
+                <h2>法人・教育機関向けのお問い合わせ</h2>
+                <p class="contact-tel">090-8147-0256</p>
+                <p>
+                    導入相談、料金相談、学校・企業での活用方法についてお気軽にお問い合わせください。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 AIキャリアナビ. 法人・教育機関向けAI適性診断サービス。</p>
+        </div>
+    </footer>
+
+    <script>
+        const fadeElements = document.querySelectorAll('.fade-in');
+
+        const fadeObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                }
+            });
+        }, {
+            threshold: 0.25
+        });
+
+        fadeElements.forEach((element) => {
+            fadeObserver.observe(element);
+        });
+    </script>
+</body>
+</html>

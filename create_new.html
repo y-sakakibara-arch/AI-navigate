@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>特注設計AIナビ</title>
+    <style>
+        :root {
+            color-scheme: light;
+            --bg: #eef3f8;
+            --surface: #ffffff;
+            --surface-strong: #f5f9ff;
+            --text: #1d2733;
+            --muted: #64707d;
+            --primary: #255a87;
+            --primary-dark: #163f5a;
+            --accent: #3d9b7f;
+            --shadow: 0 16px 40px rgba(16, 42, 81, 0.12);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: "Yu Gothic UI", Meiryo, "Helvetica Neue", Arial, sans-serif;
+            background: linear-gradient(180deg, #edf3fb 0%, #f8fbff 100%);
+            color: var(--text);
+        }
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(28, 67, 118, 0.08);
+        }
+        .topbar {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary-dark);
+        }
+        .brand-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #276a8f, #3d9b7f);
+            color: white;
+            display: grid;
+            place-items: center;
+            font-size: 1.2rem;
+        }
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            font-size: 0.95rem;
+        }
+        .nav-links a {
+            color: var(--muted);
+            transition: color .2s ease;
+        }
+        .nav-links a:hover {
+            color: var(--primary-dark);
+        }
+        .hero {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 44px 24px 16px;
+            display: grid;
+            gap: 24px;
+        }
+        .hero-inner {
+            display: grid;
+            gap: 24px;
+        }
+        .hero-title {
+            font-size: clamp(2.4rem, 4vw, 3.8rem);
+            line-height: 1.02;
+            margin: 0;
+            letter-spacing: -0.03em;
+            color: #12243c;
+        }
+        .hero-description {
+            max-width: 720px;
+            font-size: 1.05rem;
+            line-height: 1.75;
+            color: var(--muted);
+        }
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+        .hero-actions .btn {
+            border-radius: 999px;
+            font-weight: 700;
+            box-shadow: 0 18px 40px rgba(37, 90, 135, 0.15);
+        }
+        .hero-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--muted);
+        }
+        .overview {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 32px;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 18px;
+        }
+        .feature-card {
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(37, 90, 135, 0.08);
+        }
+        .feature-card h3 {
+            margin-top: 18px;
+            margin-bottom: 12px;
+            color: var(--primary-dark);
+        }
+        .feature-card p {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+        .feature-badge {
+            display: inline-flex;
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            align-items: center;
+            justify-content: center;
+            background: rgba(37, 90, 135, 0.1);
+            color: #1c3d67;
+            font-size: 1.2rem;
+        }
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px 48px;
+            display: grid;
+            gap: 20px;
+        }
+        .page-layout {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+        }
+        .card {
+            background: var(--surface);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            padding: 28px;
+            border: 1px solid rgba(37, 90, 135, 0.08);
+        }
+        .card h2,
+        .card h3 {
+            margin-top: 0;
+            color: var(--primary-dark);
+        }
+        .card h2 {
+            font-size: 1.5rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2f3f52;
+            font-weight: 700;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid #d8e2ed;
+            border-radius: 14px;
+            font-size: 1rem;
+            background: #f8fbff;
+            color: var(--text);
+            margin-top: 8px;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: rgba(37, 90, 135, 0.35);
+            box-shadow: 0 0 0 4px rgba(37, 90, 135, 0.08);
+        }
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+        .form-row {
+            display: grid;
+            gap: 18px;
+        }
+        .form-row.two {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #276a8f, #3d9b7f);
+            color: white;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            padding: 16px 28px;
+            font-size: 1rem;
+            transition: transform .2s ease, box-shadow .2s ease;
+            margin-top: 16px;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 20px 35px rgba(37, 90, 135, 0.18);
+        }
+        .result {
+            display: grid;
+            gap: 20px;
+        }
+        .result section {
+            padding: 24px;
+            border-radius: 22px;
+            background: #f8fbff;
+            border: 1px solid rgba(37, 90, 135, 0.08);
+        }
+        .result h3 {
+            color: var(--primary-dark);
+        }
+        .output-list {
+            padding-left: 1.2rem;
+            color: var(--muted);
+            line-height: 1.8;
+        }
+        .output-list li {
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background: rgba(222, 235, 252, 0.8);
+            padding: 18px;
+            border-radius: 18px;
+            font-family: Consolas, Monaco, 'Courier New', monospace;
+            white-space: pre-wrap;
+            color: #1f3a66;
+            border: 1px solid rgba(37, 90, 135, 0.12);
+        }
+        .diagram {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+            margin-top: 16px;
+        }
+        .diagram-box {
+            background: white;
+            border: 1px solid rgba(37, 90, 135, 0.12);
+            border-radius: 18px;
+            padding: 24px;
+            text-align: left;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .diagram-box span {
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: block;
+            margin-bottom: 10px;
+        }
+        .note {
+            border-left: 4px solid #54a354;
+            background: #ecf8ed;
+            padding: 18px;
+            border-radius: 16px;
+            color: #2d5130;
+            line-height: 1.75;
+        }
+        .section-title {
+            font-size: 1.25rem;
+            margin-bottom: 16px;
+            color: var(--primary);
+        }
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #f1f6ff;
+            border: 1px solid rgba(37, 90, 135, 0.16);
+            border-radius: 999px;
+            padding: 10px 14px;
+            color: var(--primary-dark);
+            font-size: 0.95rem;
+        }
+        .table-wrapper {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 18px;
+        }
+        th, td {
+            padding: 14px 12px;
+            text-align: left;
+            font-size: 0.97rem;
+            border-bottom: 1px solid rgba(37, 90, 135, 0.1);
+        }
+        th {
+            background: #f3f8ff;
+            color: #1a3c67;
+        }
+        footer {
+            margin-top: 28px;
+            padding: 32px 24px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+        @media(max-width: 980px) {
+            .page-layout {
+                grid-template-columns: 1fr;
+            }
+            .features {
+                grid-template-columns: 1fr;
+            }
+            .diagram {
+                grid-template-columns: 1fr;
+            }
+            .form-row.two {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media(max-width: 720px) {
+            .topbar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .hero-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .nav-links {
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="topbar">
+            <a class="brand" href="#top">
+                <span class="brand-icon">AI</span>
+                <span>特注設計AIナビ</span>
+            </a>
+            <nav class="nav-links">
+                <a href="#features">特長</a>
+                <a href="#tool">ツール</a>
+                <a href="#system">構成</a>
+            </nav>
+        </div>
+    </header>
+    <section class="hero" id="top">
+        <div class="hero-inner">
+            <div>
+                <h1 class="hero-title">特注品設計の初期検討を、図面・見積・注意点まで一気に生成</h1>
+                <p class="hero-description">梯子・脚立・踏み台・作業台・足場台の条件を入力すると、簡易2D図面、部材表、概算見積、設計レビューを自動生成します。設計ロジック＋AIで実務に近い提案をサポートします。</p>
+                <div class="hero-actions">
+                    <button class="btn" onclick="document.getElementById('toolForm').scrollIntoView({ behavior: 'smooth' })">今すぐ試す</button>
+                    <a class="hero-secondary" href="#system">仕組みを見る</a>
+                </div>
+                <div class="chips">
+                    <span class="chip">簡易CAD生成</span>
+                    <span class="chip">概算見積</span>
+                    <span class="chip">注意点生成</span>
+                    <span class="chip">部材流用候補</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="overview" id="features">
+        <div class="section-title">このサービスでできること</div>
+        <div class="features">
+            <div class="feature-card">
+                <div class="feature-badge">1</div>
+                <h3>簡易CAD生成エンジン</h3>
+                <p>入力条件から正面図・側面図・平面図を自動生成。寸法付き2D図面と部材表を作成し、流用可能な既存図面候補も提示します。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-badge">2</div>
+                <h3>概算見積AI</h3>
+                <p>部材表と加工条件をもとに材料費・加工費・組立費・表面処理費を計算。ルールベース計算＋AIコメントで妥当性を確認します。</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-badge">3</div>
+                <h3>設計レビュー支援</h3>
+                <p>設計漏れ・安全リスク・製造上の注意点を自動生成。RAG的に社内ルールや基準を参照する想定で、現場運用にも近いレビューを支援します。</p>
+            </div>
+        </div>
+    </section>
+    <main>
+        <div class="page-layout">
+            <section class="card" id="toolForm">
+                <h2>設計条件入力</h2>
+                <div class="form-row two">
+                    <label>
+                        製品カテゴリ
+                        <select id="productType">
+                            <option value="梯子">梯子</option>
+                            <option value="脚立">脚立</option>
+                            <option value="踏み台">踏み台</option>
+                            <option value="作業台">作業台</option>
+                            <option value="足場台">足場台</option>
+                        </select>
+                    </label>
+                    <label>
+                        使用用途
+                        <input id="useCase" type="text" placeholder="例：倉庫内の棚上作業" value="倉庫内の棚上作業" />
+                    </label>
+                </div>
+                <div class="form-row two">
+                    <label>
+                        高さ (mm)
+                        <input id="height" type="number" min="200" step="50" value="1800" />
+                    </label>
+                    <label>
+                        幅 (mm)
+                        <input id="width" type="number" min="200" step="50" value="600" />
+                    </label>
+                </div>
+                <div class="form-row two">
+                    <label>
+                        奥行 (mm)
+                        <input id="depth" type="number" min="200" step="50" value="400" />
+                    </label>
+                    <label>
+                        耐荷重 (kg)
+                        <input id="load" type="number" min="50" step="10" value="120" />
+                    </label>
+                </div>
+                <div class="form-row two">
+                    <label>
+                        主素材
+                        <select id="material">
+                            <option value="アルミ">アルミ</option>
+                            <option value="スチール">スチール</option>
+                            <option value="ステンレス">ステンレス</option>
+                            <option value="木製">木製</option>
+                        </select>
+                    </label>
+                    <label>
+                        使用環境
+                        <select id="environment">
+                            <option value="屋内">屋内</option>
+                            <option value="屋外">屋外</option>
+                            <option value="工場内">工場内</option>
+                            <option value="倉庫">倉庫</option>
+                        </select>
+                    </label>
+                </div>
+                <label>
+                    必要部材 / オプション
+                    <textarea id="options" placeholder="例：手すり付き、滑り止め、収納式">手すり付き、滑り止め</textarea>
+                </label>
+                <label>
+                    備考 / 特記事項
+                    <textarea id="notes" placeholder="納期、設置条件、顧客要望を入力してください。">屋外保管の可能性あり。滑り止め必須。</textarea>
+                </label>
+                <div class="form-row two">
+                    <button class="btn" onclick="generateProposal()">提案を生成</button>
+                    <button class="btn" onclick="window.print()">PDF出力 (印刷)</button>
+                </div>
+            </section>
+            <section class="card result" id="resultsContainer">
+                <section>
+                    <h3>提案サマリ</h3>
+                    <p class="note">設計ロジック＋簡易AIとして、図面案・見積・チェックリストをまとめて作成します。最終判断は専門設計者が行ってください。</p>
+                    <div id="summaryOutput" class="code-block">条件を入力して「提案を生成」を押してください。</div>
+                </section>
+                <section>
+                    <h3>簡易2D図面</h3>
+                    <div class="diagram">
+                        <div class="diagram-box">
+                            <span>正面図</span>
+                            <div id="frontSvg"></div>
+                        </div>
+                        <div class="diagram-box">
+                            <span>側面図</span>
+                            <div id="sideSvg"></div>
+                        </div>
+                        <div class="diagram-box">
+                            <span>平面図</span>
+                            <div id="topSvg"></div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>部材表</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>部材名</th>
+                                    <th>規格</th>
+                                    <th>数量</th>
+                                    <th>素材</th>
+                                    <th>流用可否</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bomTable"></tbody>
+                        </table>
+                    </div>
+                </section>
+                <section>
+                    <h3>概算見積</h3>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>内訳</th>
+                                    <th>金額</th>
+                                </tr>
+                            </thead>
+                            <tbody id="estimateTable"></tbody>
+                        </table>
+                    </div>
+                    <div id="estimateSummary" class="code-block">-</div>
+                </section>
+                <section>
+                    <h3>設計レビュー・注意点</h3>
+                    <ul id="checklistOutput" class="output-list"></ul>
+                </section>
+                <section>
+                    <h3>流用候補 / 既存図面</h3>
+                    <div id="reuseOutput" class="output-list"></div>
+                </section>
+            </section>
+        </div>
+        <section class="card" id="system">
+            <h2>AIサービス構成</h2>
+            <div class="section-title">4層構成で実務向けに設計</div>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-badge">①</div>
+                    <h3>入力管理層</h3>
+                    <p>製品種別、寸法、耐荷重、材質、使用環境、オプション、参考図面を入力します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-badge">②</div>
+                    <h3>設計ロジック層</h3>
+                    <p>標準部材選定、流用候補検索、パラメトリック図面生成、部材表作成を行うルールベースエンジンです。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-badge">③</div>
+                    <h3>AI支援層</h3>
+                    <p>LLMで入力内容の整理、注意点生成、見積コメント、リスク整理、顧客説明文を作成します。</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-badge">④</div>
+                    <h3>出力層</h3>
+                    <p>簡易図面、部材表、概算見積、注意点一覧、PDF提案書を出力します。</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    <footer>
+        特注設計AIナビ | 図面生成 + 見積 + 設計レビューをまとめてサポート
+    </footer>
+    <script>
+        const pastDesigns = [
+            { category: '梯子', name: 'アルミ折りたたみ梯子', height: 2000, width: 450, depth: 120, load: 150, note: '折りたたみ機構と共用部材' },
+            { category: '脚立', name: 'スチール脚立4段', height: 1800, width: 520, depth: 380, load: 120, note: '工場内用定番脚立' },
+            { category: '踏み台', name: '木製踏み台2段', height: 600, width: 500, depth: 400, load: 100, note: '滑り止め付き木製' },
+            { category: '作業台', name: 'ステンレス作業台', height: 900, width: 800, depth: 600, load: 200, note: '屋外対応手すり付き' },
+            { category: '足場台', name: 'モジュラー足場台900mm幅', height: 1200, width: 900, depth: 600, load: 200, note: '手すり・連結金具付き' }
+        ];
+
+        const materialCostPerM = {
+            'アルミ': 4200,
+            'スチール': 2600,
+            'ステンレス': 5600,
+            '木製': 2100
+        };
+
+        const processCost = {
+            cutting: 400,
+            drilling: 600,
+            welding: 1500,
+            assembly: 1200,
+            finishing: 1100
+        };
+
+        const overheadRate = 0.12;
+        const profitRate = 0.18;
+
+        function formatYen(value) {
+            return value.toLocaleString('ja-JP') + ' 円';
+        }
+
+        function generateProposal() {
+            const productType = document.getElementById('productType').value;
+            const useCase = document.getElementById('useCase').value.trim();
+            const height = parseInt(document.getElementById('height').value, 10) || 1800;
+            const width = parseInt(document.getElementById('width').value, 10) || 600;
+            const depth = parseInt(document.getElementById('depth').value, 10) || 400;
+            const load = parseInt(document.getElementById('load').value, 10) || 120;
+            const material = document.getElementById('material').value;
+            const environment = document.getElementById('environment').value;
+            const options = document.getElementById('options').value.trim();
+            const notes = document.getElementById('notes').value.trim();
+
+            const designGrade = load >= 180 ? '強化耐荷重' : '標準耐荷重';
+            const surfaceFinishing = (environment === '屋外' || material === 'スチール') ? '防錆塗装/アルマイト' : '標準仕上げ';
+            const summaryText = `製品カテゴリ: ${productType}\n使用用途: ${useCase}\n寸法: ${height}×${width}×${depth} mm\n耐荷重: ${load} kg\n材質: ${material}\n使用環境: ${environment}\n設計グレード: ${designGrade}\n表面処理: ${surfaceFinishing}\nオプション: ${options || 'なし'}\n備考: ${notes}`;
+
+            const design = generateDesign(productType, height, width, depth, load, material, options);
+            const bom = generateBom(productType, height, width, depth, load, material, options);
+            const estimate = calculateEstimate(bom, material, surfaceFinishing);
+            const checks = generateChecks(productType, height, width, depth, load, material, environment, options);
+            const reuse = findReuseCandidates(productType, height, width, depth, load);
+
+            document.getElementById('summaryOutput').textContent = summaryText;
+            renderSvg('frontSvg', design.front, '正面図');
+            renderSvg('sideSvg', design.side, '側面図');
+            renderSvg('topSvg', design.top, '平面図');
+            renderBomTable(bom);
+            renderEstimate(estimate);
+            renderChecks(checks);
+            renderReuse(reuse);
+        }
+
+        function generateDesign(productType, height, width, depth, load, material, options) {
+            const stepCount = Math.max(2, Math.floor((height - 200) / 250));
+            const hasHandrail = /手すり/.test(options) || productType === '足場台' || productType === '作業台';
+            const reinforcement = /補強/.test(options) || load > 160;
+            return {
+                front: {
+                    width,
+                    height,
+                    elements: [
+                        { type: 'frame', x: 20, y: 20, w: width - 40, h: height - 40 },
+                        ...Array.from({ length: stepCount }, (_, index) => ({ type: 'step', x: 20, y: 40 + index * 180, w: width - 40, h: 16 })),
+                        ...(hasHandrail ? [{ type: 'handrail', x: width - 38, y: 20, w: 16, h: height - 40 }] : []),
+                        ...(reinforcement ? [{ type: 'brace', x: width / 2 - 10, y: Math.max(60, height / 3), w: 20, h: 40 }] : [])
+                    ]
+                },
+                side: {
+                    width: depth,
+                    height,
+                    elements: [
+                        { type: 'frame', x: 20, y: 20, w: depth - 40, h: height - 40 },
+                        ...(hasHandrail ? [{ type: 'handrail', x: depth - 38, y: 20, w: 16, h: height - 40 }] : [])
+                    ]
+                },
+                top: {
+                    width,
+                    height: depth,
+                    elements: [
+                        { type: 'platform', x: 20, y: 20, w: width - 40, h: depth - 40 },
+                        ...(hasHandrail ? [{ type: 'handrail-top', x: width - 38, y: 20, w: 16, h: depth - 40 }] : [])
+                    ]
+                }
+            };
+        }
+
+        function generateBom(productType, height, width, depth, load, material, options) {
+            const stepCount = Math.max(2, Math.floor((height - 200) / 250));
+            const hasHandrail = /手すり/.test(options) || productType === '足場台' || productType === '作業台';
+            const items = [
+                { name: '縦フレーム', spec: `${material}角パイプ 40×40mm`, quantity: 2, material, reuse: '可能' },
+                { name: '踏み板', spec: `${width - 40}×120mm`, quantity: stepCount, material, reuse: stepCount > 2 ? '検討' : '可能' },
+                { name: '横補強材', spec: `${Math.ceil(width / 2)}mm`, quantity: 2, material, reuse: '可能' }
+            ];
+            if (hasHandrail) {
+                items.push({ name: '手すり', spec: `${material}丸棒 25mm`, quantity: 2, material, reuse: '再利用候補' });
+            }
+            if (/滑り止め/.test(options)) {
+                items.push({ name: '滑り止め材', spec: 'エラストマーシート', quantity: stepCount, material: '補助材', reuse: '新規' });
+            }
+            if (/収納式/.test(options)) {
+                items.push({ name: '収納機構', spec: '折りたたみ金具', quantity: 1, material: '金属部品', reuse: '新規' });
+            }
+            return items;
+        }
+
+        function calculateEstimate(bom, material, finishing) {
+            const materialLength = bom.reduce((sum, item) => sum + (item.name === '踏み板' ? 0.4 * item.quantity : 1.5 * item.quantity), 0);
+            const materialCost = Math.round(materialLength * (materialCostPerM[material] || 2500));
+            const cutting = Math.round(processCost.cutting * bom.length);
+            const drilling = Math.round(processCost.drilling * Math.max(1, bom.length - 1));
+            const welding = Math.round(processCost.welding * (bom.length > 3 ? 2 : 1));
+            const assembly = Math.round(processCost.assembly * bom.length);
+            const finishingCost = Math.round(processCost.finishing * (finishing.includes('防錆') ? 2 : 1));
+            const subtotal = materialCost + cutting + drilling + welding + assembly + finishingCost;
+            const overhead = Math.round(subtotal * overheadRate);
+            const profit = Math.round((subtotal + overhead) * profitRate);
+            const total = subtotal + overhead + profit;
+            return {
+                breakdown: [
+                    { name: '材料費', amount: materialCost },
+                    { name: '切断費', amount: cutting },
+                    { name: '穴あけ費', amount: drilling },
+                    { name: '溶接費', amount: welding },
+                    { name: '組立費', amount: assembly },
+                    { name: '仕上げ費', amount: finishingCost },
+                    { name: '諸経費', amount: overhead },
+                    { name: '利益', amount: profit }
+                ],
+                total
+            };
+        }
+
+        function generateChecks(productType, height, width, depth, load, material, environment, options) {
+            const checks = [];
+            checks.push(`耐荷重 ${load}kg に対する断面強度と接合強度を必ず確認する。`);
+            checks.push(`${height}mm の高さに対する転倒防止と脚部の安定性を検証する。`);
+            if (environment === '屋外') {
+                checks.push('屋外環境に応じた防錆・耐候性処理を設計に反映する。');
+            }
+            if (material === '木製') {
+                checks.push('木材の含水率・寸法変化と防腐処理を確認する。');
+            }
+            if (/手すり/.test(options)) {
+                checks.push('手すり高さ・設置強度・接合方法をチェックする。');
+            }
+            if (/滑り止め/.test(options)) {
+                checks.push('踏み板の滑り止め材質と耐摩耗性を確認する。');
+            }
+            if (/収納式/.test(options)) {
+                checks.push('収納機構の干渉と動作耐久性を検証する。');
+            }
+            checks.push('溶接箇所の歪みと熱変形を注意して確認する。');
+            checks.push('輸送時サイズ・重量制限および梱包形態を確認する。');
+            checks.push('社内設計基準・過去不具合事例を参照して最終判断を行う。');
+            return checks;
+        }
+
+        function findReuseCandidates(category, height, width, depth, load) {
+            return pastDesigns
+                .filter(item => item.category === category || Math.abs(item.height - height) < 300)
+                .map(item => `${item.name} (${item.height}×${item.width}×${item.depth} mm、耐荷重 ${item.load}kg) - ${item.note}`);
+        }
+
+        function renderBomTable(bom) {
+            const tbody = document.getElementById('bomTable');
+            tbody.innerHTML = '';
+            bom.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.name}</td><td>${item.spec}</td><td>${item.quantity}</td><td>${item.material}</td><td>${item.reuse}</td>`;
+                tbody.appendChild(row);
+            });
+        }
+
+        function renderEstimate(estimate) {
+            const tbody = document.getElementById('estimateTable');
+            tbody.innerHTML = '';
+            estimate.breakdown.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `<td>${item.name}</td><td>${formatYen(item.amount)}</td>`;
+                tbody.appendChild(row);
+            });
+            document.getElementById('estimateSummary').textContent = `利益込み概算価格: ${formatYen(estimate.total)}`;
+        }
+
+        function renderChecks(checks) {
+            const list = document.getElementById('checklistOutput');
+            list.innerHTML = '';
+            checks.forEach(text => {
+                const li = document.createElement('li');
+                li.textContent = text;
+                list.appendChild(li);
+            });
+        }
+
+        function renderReuse(reuse) {
+            const container = document.getElementById('reuseOutput');
+            container.innerHTML = '';
+            if (!reuse.length) {
+                container.textContent = '候補が見つかりませんでした。';
+                return;
+            }
+            reuse.forEach(item => {
+                const div = document.createElement('div');
+                div.textContent = `・${item}`;
+                container.appendChild(div);
+            });
+        }
+
+        function renderSvg(targetId, view, title) {
+            const width = 340;
+            const height = 220;
+            const scale = Math.min((width - 40) / view.width, (height - 40) / view.height);
+            const content = [];
+            content.push(`<svg viewBox="0 0 ${width} ${height}" width="100%" height="180" role="img" aria-label="${title}">`);
+            content.push(`<rect x="1" y="1" width="${width - 2}" height="${height - 2}" rx="18" fill="#f7fbff" stroke="#d3e3f4" stroke-width="2"/>`);
+            const offsetX = 20;
+            const offsetY = 20;
+            const shapeW = view.width * scale;
+            const shapeH = view.height * scale;
+            content.push(`<rect x="${offsetX}" y="${offsetY}" width="${shapeW}" height="${shapeH}" fill="rgba(37,90,135,0.08)" stroke="#1f4d6c" stroke-width="2" rx="8"/>`);
+            view.elements.forEach(elem => {
+                const x = offsetX + (elem.x / view.width) * shapeW;
+                const y = offsetY + (elem.y / view.height) * shapeH;
+                const w = (elem.w / view.width) * shapeW;
+                const h = (elem.h / view.height) * shapeH;
+                if (['step', 'handrail', 'brace', 'platform', 'handrail-top'].includes(elem.type)) {
+                    const fill = elem.type === 'step' ? '#b3d4ff' : elem.type.includes('handrail') ? '#9cc6ff' : '#cde3f9';
+                    content.push(`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${fill}" stroke="#1f4d6c" stroke-width="1"/>`);
+                }
+            });
+            content.push(`<text x="${width / 2}" y="${height - 12}" text-anchor="middle" fill="#1f4d6c" font-size="13">${title}（縮尺表示）</text>`);
+            content.push('</svg>');
+            document.getElementById(targetId).innerHTML = content.join('');
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            generateProposal();
+        });
+    </script>
+</body>
+</html>
