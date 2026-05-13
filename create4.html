@@ -627,6 +627,355 @@
             letter-spacing: 0.04em;
             box-shadow: 0 20px 50px rgba(91, 124, 250, 0.3);
         }
+
+
+        /* 左上ロゴを見やすくする追加CSS */
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #102040;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .logo-mark {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #5b7cfa 0%, #7f9cff 55%, #70d6ff 100%);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 14px 34px rgba(91, 124, 250, 0.32);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 68px;
+            height: 68px;
+            border-radius: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            transform: rotate(18deg);
+        }
+
+        .logo-mark svg {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.08;
+        }
+
+        .logo-sub {
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            color: #6374b8;
+            margin-bottom: 4px;
+        }
+
+        .logo-main {
+            font-size: 1.08rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #102040;
+        }
+        /* 左上ロゴを見やすくする追加CSS */
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #102040;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .logo-mark {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #5b7cfa 0%, #7f9cff 55%, #70d6ff 100%);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 14px 34px rgba(91, 124, 250, 0.32);
+            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 68px;
+            height: 68px;
+            border-radius: 22px;
+            border: 2px solid rgba(255, 255, 255, 0.35);
+            transform: rotate(18deg);
+        }
+
+        .logo-mark svg {
+            width: 30px;
+            height: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.08;
+        }
+
+        .logo-sub {
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            color: #6374b8;
+            margin-bottom: 4px;
+        }
+
+        .logo-main {
+            font-size: 1.08rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: #102040;
+        }
+
+
+        /* 1枚目の写真を大きく固定表示 */
+        .fixed-main-visual {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            padding-top: 88px;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(91, 124, 250, 0.12), transparent 28%),
+                linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%);
+        }
+
+        .fixed-main-image {
+            position: sticky;
+            top: 88px;
+            width: 100%;
+            height: calc(100vh - 88px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 22px;
+            overflow: hidden;
+            background: #f8fbff;
+        }
+
+        .fixed-main-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            display: block;
+            border-radius: 32px;
+            background: white;
+            box-shadow: 0 34px 100px rgba(16, 32, 64, 0.22);
+        }
+
+        /* 追加4枚のスライドショー */
+        .service-slide-section {
+            position: relative;
+            z-index: 2;
+            padding: 74px 24px 92px;
+            background:
+                radial-gradient(circle at 10% 5%, rgba(91, 124, 250, 0.16), transparent 28%),
+                radial-gradient(circle at 90% 10%, rgba(127, 156, 255, 0.14), transparent 26%),
+                linear-gradient(180deg, #eef4ff 0%, #f8fbff 100%);
+        }
+
+        .service-slide-heading {
+            max-width: 900px;
+            margin: 0 auto 34px;
+            text-align: center;
+        }
+
+        .service-slide-heading span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: white;
+            color: #33418f;
+            font-weight: 900;
+            box-shadow: 0 14px 34px rgba(91, 124, 250, 0.16);
+            border: 1px solid rgba(91, 124, 250, 0.18);
+            margin-bottom: 18px;
+        }
+
+        .service-slide-heading span::before {
+            content: "✦";
+            color: #5b7cfa;
+        }
+
+        .service-slide-heading h2 {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            line-height: 1.15;
+            margin-bottom: 16px;
+            color: #102040;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .service-slide-heading p {
+            color: #2a3a5e;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        .service-slider {
+            position: relative;
+            max-width: 1180px;
+            height: min(640px, 58vw);
+            min-height: 430px;
+            margin: 0 auto;
+            border-radius: 36px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 34px 100px rgba(16, 32, 64, 0.20);
+            border: 1px solid rgba(91, 124, 250, 0.16);
+        }
+
+        .service-slide {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            transform: scale(1.04);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+
+        .service-slide.active {
+            opacity: 1;
+            transform: scale(1);
+            z-index: 1;
+        }
+
+        .service-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .service-slide-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            width: 52px;
+            height: 52px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.88);
+            color: #3154d4;
+            font-size: 2.2rem;
+            line-height: 1;
+            cursor: pointer;
+            box-shadow: 0 14px 34px rgba(16, 32, 64, 0.18);
+            transition: transform 0.25s ease, background 0.25s ease;
+        }
+
+        .service-slide-btn:hover {
+            transform: translateY(-50%) scale(1.08);
+            background: white;
+        }
+
+        .service-slide-btn.prev {
+            left: 22px;
+        }
+
+        .service-slide-btn.next {
+            right: 22px;
+        }
+
+        .service-slide-dots {
+            position: absolute;
+            left: 50%;
+            bottom: 22px;
+            transform: translateX(-50%);
+            z-index: 4;
+            display: flex;
+            gap: 10px;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.78);
+            backdrop-filter: blur(8px);
+        }
+
+        .service-dot {
+            width: 11px;
+            height: 11px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(91, 124, 250, 0.28);
+            cursor: pointer;
+            transition: width 0.25s ease, background 0.25s ease;
+        }
+
+        .service-dot.active {
+            width: 28px;
+            border-radius: 999px;
+            background: #5b7cfa;
+        }
+
+        @media (max-width: 760px) {
+            .fixed-main-visual {
+                min-height: 78vh;
+                padding-top: 76px;
+            }
+
+            .fixed-main-image {
+                top: 76px;
+                height: calc(78vh - 76px);
+                padding: 12px;
+            }
+
+            .fixed-main-image img {
+                border-radius: 22px;
+            }
+
+            .service-slide-section {
+                padding: 58px 16px 72px;
+            }
+
+            .service-slider {
+                height: 320px;
+                min-height: 320px;
+                border-radius: 26px;
+            }
+
+            .service-slide-btn {
+                width: 42px;
+                height: 42px;
+                font-size: 1.8rem;
+            }
+
+            .service-slide-btn.prev {
+                left: 12px;
+            }
+
+            .service-slide-btn.next {
+                right: 12px;
+            }
+        }
+
     </style>
 </head>
 <body id="top">
@@ -658,16 +1007,44 @@
         </nav>
         </div>
     </header>
-<div class="photo-loop-container">
-    <div class="photo-track">
-        <img src="5e1526f7-91f8-4883-a300-7fa2433f1603.png" alt="AIキャリアナビ サービス画面">
-        <img src="80e7383e-c8cb-41f6-b584-c047be9d0525.png" alt="AIキャリアナビ サービス詳細画面">
-
-        <!-- 無限ループ用に同じ画像をもう一度並べる -->
-        <img src="5e1526f7-91f8-4883-a300-7fa2433f1603.png" alt="AIキャリアナビ サービス画面">
-        <img src="80e7383e-c8cb-41f6-b584-c047be9d0525.png" alt="AIキャリアナビ サービス詳細画面">
+<section class="fixed-main-visual" id="top-visual">
+    <div class="fixed-main-image">
+        <img src="5e1526f7-91f8-4883-a300-7fa2433f1603.png" alt="AIキャリアナビ メインビジュアル">
     </div>
-</div>
+</section>
+
+<section class="service-slide-section" aria-label="診断サービススライド">
+    <div class="service-slide-heading">
+        <span>診断サービスのイメージ</span>
+        <h2>あなたに合う診断を、AIが深くサポート</h2>
+        <p>大学・就職転職・企業内適任・趣味ライフスタイルまで、目的に合わせて選べます。</p>
+    </div>
+
+    <div class="service-slider" id="serviceSlider">
+        <div class="service-slide active">
+            <img src="大学学部1.png" alt="大学・学部診断">
+        </div>
+        <div class="service-slide">
+            <img src="就職転職1.png" alt="就職・転職適職診断">
+        </div>
+        <div class="service-slide">
+            <img src="企業内適任1.png" alt="企業内適任診断">
+        </div>
+        <div class="service-slide">
+            <img src="趣味ライフプラン1.png" alt="趣味・ライフスタイル提案">
+        </div>
+
+        <button class="service-slide-btn prev" type="button" aria-label="前のスライド">‹</button>
+        <button class="service-slide-btn next" type="button" aria-label="次のスライド">›</button>
+
+        <div class="service-slide-dots">
+            <button class="service-dot active" type="button" data-slide="0" aria-label="1枚目"></button>
+            <button class="service-dot" type="button" data-slide="1" aria-label="2枚目"></button>
+            <button class="service-dot" type="button" data-slide="2" aria-label="3枚目"></button>
+            <button class="service-dot" type="button" data-slide="3" aria-label="4枚目"></button>
+        </div>
+    </div>
+</section>
 <section class="hero fade-in" id="hero">
     <div class="hero-copy">
         <span class="badge">長文キャッチボールで深堀り診断</span>
@@ -774,6 +1151,47 @@
     fadeElements.forEach((element) => {
         fadeObserver.observe(element);
     });
+
+
+        const serviceSlides = document.querySelectorAll('.service-slide');
+        const serviceDots = document.querySelectorAll('.service-dot');
+        const servicePrev = document.querySelector('.service-slide-btn.prev');
+        const serviceNext = document.querySelector('.service-slide-btn.next');
+        let serviceCurrent = 0;
+
+        function showServiceSlide(index) {
+            serviceCurrent = (index + serviceSlides.length) % serviceSlides.length;
+
+            serviceSlides.forEach((slide, i) => {
+                slide.classList.toggle('active', i === serviceCurrent);
+            });
+
+            serviceDots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === serviceCurrent);
+            });
+        }
+
+        function nextServiceSlide() {
+            showServiceSlide(serviceCurrent + 1);
+        }
+
+        function prevServiceSlide() {
+            showServiceSlide(serviceCurrent - 1);
+        }
+
+        if (serviceSlides.length && serviceNext && servicePrev) {
+            serviceNext.addEventListener('click', nextServiceSlide);
+            servicePrev.addEventListener('click', prevServiceSlide);
+
+            serviceDots.forEach((dot) => {
+                dot.addEventListener('click', () => {
+                    showServiceSlide(Number(dot.dataset.slide));
+                });
+            });
+
+            setInterval(nextServiceSlide, 4500);
+        }
+
 </script>
 </body>
 </html>
