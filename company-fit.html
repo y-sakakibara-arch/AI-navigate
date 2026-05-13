@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>企業内適任診断 | AIキャリアナビ</title>
+    <style>
+        :root {
+            --main: #0050b8;
+            --main2: #006ee6;
+            --ink: #102040;
+            --text: #2a3a5e;
+            --muted: #63708d;
+            --bg: #f8fbff;
+            --white: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            min-height: 100%;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: "Yu Gothic UI", Meiryo, "Helvetica Neue", Arial, sans-serif;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at 12% 8%, rgba(0, 80, 184, 0.14), transparent 28%),
+                radial-gradient(circle at 88% 12%, rgba(98, 180, 255, 0.14), transparent 26%),
+                linear-gradient(180deg, #ffffff 0%, var(--bg) 100%);
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 16px 24px;
+            background: rgba(255,255,255,0.86);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(16, 32, 64, 0.08);
+            box-shadow: 0 10px 34px rgba(16, 32, 64, 0.06);
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            will-change: transform;
+        }
+
+        header.header-hidden {
+            transform: translateY(-115%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        header.header-visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .header-container {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+        .logo {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: var(--ink);
+            font-weight: 900;
+            white-space: nowrap;
+        }
+
+        .logo-mark {
+            width: 48px;
+            height: 48px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--main) 0%, var(--main2) 100%);
+            display: grid;
+            place-items: center;
+            box-shadow: 0 14px 34px rgba(0, 80, 184, 0.24);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo-mark::after {
+            content: "";
+            position: absolute;
+            width: 68px;
+            height: 68px;
+            border-radius: 22px;
+            border: 2px solid rgba(255,255,255,0.35);
+            transform: rotate(18deg);
+        }
+
+        .logo-mark span {
+            position: relative;
+            z-index: 1;
+            color: white;
+            font-size: 1.35rem;
+        }
+
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.08;
+        }
+
+        .logo-sub {
+            font-size: 0.68rem;
+            font-weight: 900;
+            letter-spacing: 0.14em;
+            color: var(--main2);
+            margin-bottom: 4px;
+        }
+
+        .logo-main {
+            font-size: 1.08rem;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+            color: var(--ink);
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+            font-size: 0.94rem;
+            font-weight: 800;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--ink);
+            transition: color 0.25s ease, transform 0.25s ease;
+        }
+
+        nav a:hover {
+            color: var(--main);
+            transform: translateY(-2px);
+        }
+
+        .btn-header {
+            color: white !important;
+            padding: 10px 20px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--main) 0%, var(--main2) 100%);
+            box-shadow: 0 12px 28px rgba(0, 80, 184, 0.24);
+        }
+
+        .top-visual {
+            width: 100%;
+            min-height: 100vh;
+            background: #f8fbff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .top-visual img {
+            width: 100%;
+            height: 100vh;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .top-visual::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0) 58%, rgba(248,251,255,0.30) 100%);
+            pointer-events: none;
+        }
+
+        .scroll-cue {
+            position: absolute;
+            left: 50%;
+            bottom: 26px;
+            transform: translateX(-50%);
+            z-index: 2;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            text-decoration: none;
+            color: var(--main2);
+            background: rgba(255,255,255,0.84);
+            backdrop-filter: blur(8px);
+            font-weight: 900;
+            box-shadow: 0 14px 34px rgba(16,32,64,0.12);
+        }
+
+        .scroll-cue::after {
+            content: "↓";
+            animation: scrollMove 1.4s ease-in-out infinite;
+        }
+
+        @keyframes scrollMove {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(5px); }
+        }
+
+        .intro {
+            padding: 86px 24px 70px;
+            background:
+                radial-gradient(circle at 15% 8%, rgba(0, 80, 184, 0.14), transparent 28%),
+                radial-gradient(circle at 88% 14%, rgba(98, 180, 255, 0.14), transparent 28%),
+                linear-gradient(180deg, #f8fbff 0%, #ffffff 100%);
+        }
+
+        .intro-inner {
+            max-width: 980px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            background: white;
+            color: var(--main2);
+            font-weight: 900;
+            border: 1px solid rgba(16,32,64,0.08);
+            box-shadow: 0 12px 30px rgba(16,32,64,0.08);
+            margin-bottom: 22px;
+        }
+
+        .badge::before {
+            content: "✦";
+            color: var(--main);
+        }
+
+        h1 {
+            font-size: clamp(2.4rem, 5vw, 5rem);
+            line-height: 1.08;
+            letter-spacing: -0.055em;
+            margin-bottom: 24px;
+            font-weight: 900;
+        }
+
+        h1 span {
+            background: linear-gradient(135deg, var(--main), var(--main2));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .lead {
+            max-width: 760px;
+            margin: 0 auto 28px;
+            color: var(--text);
+            font-size: 1.08rem;
+            line-height: 2;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .btn-primary,
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 54px;
+            padding: 0 25px;
+            border-radius: 999px;
+            text-decoration: none;
+            font-weight: 900;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .btn-primary {
+            color: white;
+            background: linear-gradient(135deg, var(--main) 0%, var(--main2) 100%);
+            box-shadow: 0 18px 42px rgba(0, 80, 184, 0.24);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--main2);
+            border: 1px solid rgba(16,32,64,0.08);
+            box-shadow: 0 12px 30px rgba(16,32,64,0.08);
+        }
+
+        .btn-primary:hover,
+        .btn-secondary:hover {
+            transform: translateY(-4px);
+        }
+
+        .section {
+            padding: 84px 24px;
+        }
+
+        .section-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 38px;
+        }
+
+        .section-title span {
+            display: inline-flex;
+            margin-bottom: 14px;
+            padding: 8px 16px;
+            border-radius: 999px;
+            background: #fff;
+            color: var(--main2);
+            font-weight: 900;
+            box-shadow: 0 12px 28px rgba(16,32,64,0.07);
+        }
+
+        .section-title h2 {
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            line-height: 1.16;
+            letter-spacing: -0.04em;
+            margin-bottom: 16px;
+            font-weight: 900;
+        }
+
+        .section-title p {
+            max-width: 760px;
+            margin: 0 auto;
+            color: var(--text);
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        .card, .price-card {
+            background: rgba(255,255,255,0.92);
+            border: 1px solid rgba(16,32,64,0.08);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 22px 60px rgba(16,32,64,0.09);
+        }
+
+        .card h3, .price-card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 12px;
+            font-weight: 900;
+        }
+
+        .card p,
+        .card li,
+        .price-card p {
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .card ul {
+            list-style: none;
+            display: grid;
+            gap: 10px;
+        }
+
+        .card li {
+            position: relative;
+            padding-left: 26px;
+        }
+
+        .card li::before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--main);
+            font-weight: 900;
+        }
+
+        .price {
+            font-size: 1.8rem;
+            font-weight: 900;
+            color: var(--main2) !important;
+            margin-bottom: 10px;
+        }
+
+        .image-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            align-items: stretch;
+        }
+
+        .image-panel {
+            border-radius: 30px;
+            overflow: hidden;
+            background: white;
+            border: 1px solid rgba(16,32,64,0.08);
+            box-shadow: 0 24px 70px rgba(16,32,64,0.13);
+        }
+
+        .image-panel img {
+            width: 100%;
+            height: 100%;
+            min-height: 360px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .image-panel.contain img {
+            object-fit: contain;
+            padding: 8px;
+            background: white;
+        }
+
+        .contact-card {
+            max-width: 820px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .contact-tel {
+            display: inline-flex;
+            margin: 18px 0;
+            padding: 16px 30px;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--main) 0%, var(--main2) 100%);
+            color: white;
+            font-size: clamp(1.4rem, 4vw, 2.2rem);
+            font-weight: 900;
+            box-shadow: 0 18px 42px rgba(0, 80, 184, 0.24);
+        }
+
+        .cta {
+            text-align: center;
+            padding: 84px 24px;
+            background: linear-gradient(135deg, var(--main) 0%, var(--main2) 100%);
+            color: white;
+        }
+
+        .cta h2 {
+            font-size: clamp(2rem, 4vw, 3.4rem);
+            margin-bottom: 16px;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+        .cta p {
+            max-width: 720px;
+            margin: 0 auto 26px;
+            line-height: 1.9;
+        }
+
+        .cta .btn-primary {
+            background: white;
+            color: var(--main2);
+        }
+
+        @media (max-width: 900px) {
+            nav {
+                display: none;
+            }
+
+            .top-visual {
+                min-height: 72vh;
+            }
+
+            .top-visual img {
+                height: 72vh;
+            }
+
+            .image-grid,
+            .grid-3 {
+                grid-template-columns: 1fr;
+            }
+
+            .intro {
+                padding-top: 70px;
+            }
+        }
+
+
+        /* 修正：固定ヘッダーとトップ画像が重ならないように下げる */
+        :root {
+            --header-height: 82px;
+        }
+
+        .top-visual {
+            padding-top: var(--header-height) !important;
+            min-height: 100vh !important;
+            background: #f8fbff;
+        }
+
+        .top-visual img {
+            height: calc(100vh - var(--header-height)) !important;
+            min-height: 560px;
+        }
+
+        @media (max-width: 900px) {
+            :root {
+                --header-height: 74px;
+            }
+
+            .top-visual {
+                min-height: 82vh !important;
+            }
+
+            .top-visual img {
+                height: calc(82vh - var(--header-height)) !important;
+                min-height: 420px;
+            }
+        }
+
+
+
+        /* 最終調整：4ページの1枚目画像を切らずにギリギリ大きく表示 */
+        .top-visual {
+            background:
+                radial-gradient(circle at 12% 10%, rgba(91, 124, 250, 0.10), transparent 28%),
+                radial-gradient(circle at 88% 10%, rgba(127, 156, 255, 0.10), transparent 28%),
+                #f8fbff;
+        }
+
+        .top-visual img {
+            width: 100% !important;
+            height: calc(100vh - var(--header-height)) !important;
+            max-height: calc(100vh - var(--header-height)) !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            padding: 10px 18px 18px !important;
+            background: #f8fbff;
+        }
+
+        @media (max-width: 900px) {
+            .top-visual img {
+                height: calc(82vh - var(--header-height)) !important;
+                max-height: calc(82vh - var(--header-height)) !important;
+                padding: 8px 10px 14px !important;
+            }
+        }
+
+
+
+        /* 最終修正：詳細4ページのトップ画像をindex.htmlの1枚目画像風に統一 */
+        .top-visual {
+            padding-top: var(--header-height) !important;
+            min-height: 100vh !important;
+            height: auto !important;
+            background:
+                radial-gradient(circle at 12% 10%, rgba(91, 124, 250, 0.12), transparent 28%),
+                radial-gradient(circle at 88% 10%, rgba(127, 156, 255, 0.12), transparent 28%),
+                linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%) !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            overflow: hidden !important;
+        }
+
+        .top-visual img {
+            width: 100% !important;
+            height: calc(100vh - var(--header-height)) !important;
+            max-width: 100% !important;
+            max-height: calc(100vh - var(--header-height)) !important;
+            object-fit: contain !important;
+            object-position: center !important;
+            padding: 0 !important;
+            background: transparent !important;
+            display: block !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .top-visual::after {
+            background:
+                linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0) 72%, rgba(248,251,255,0.18) 100%) !important;
+        }
+
+        .scroll-cue {
+            bottom: 20px !important;
+        }
+
+        /* スマホ版：横長画像を無理に全画面にせず、見やすいカード型に自動調整 */
+        @media (max-width: 760px) {
+            header {
+                padding: 10px 14px !important;
+            }
+
+            .header-container {
+                min-height: 54px !important;
+            }
+
+            .logo-mark {
+                width: 42px !important;
+                height: 42px !important;
+                border-radius: 14px !important;
+            }
+
+            .logo-text {
+                line-height: 1.05 !important;
+            }
+
+            .logo-sub {
+                font-size: 0.58rem !important;
+                letter-spacing: 0.11em !important;
+            }
+
+            .logo-main {
+                font-size: 0.95rem !important;
+            }
+
+            :root {
+                --header-height: 66px;
+            }
+
+            .top-visual {
+                min-height: auto !important;
+                padding-top: calc(var(--header-height) + 10px) !important;
+                padding-left: 10px !important;
+                padding-right: 10px !important;
+                padding-bottom: 20px !important;
+                align-items: flex-start !important;
+                background:
+                    radial-gradient(circle at 12% 8%, rgba(91, 124, 250, 0.13), transparent 28%),
+                    linear-gradient(180deg, #f8fbff 0%, #eef4ff 100%) !important;
+            }
+
+            .top-visual img {
+                width: 100% !important;
+                height: auto !important;
+                max-height: none !important;
+                aspect-ratio: 16 / 9 !important;
+                object-fit: contain !important;
+                border-radius: 18px !important;
+                background: #ffffff !important;
+                box-shadow: 0 18px 48px rgba(16, 32, 64, 0.14) !important;
+            }
+
+            .scroll-cue {
+                display: none !important;
+            }
+
+            .intro {
+                padding: 54px 18px 50px !important;
+            }
+
+            h1 {
+                font-size: clamp(2rem, 10vw, 3rem) !important;
+                line-height: 1.13 !important;
+            }
+
+            .lead {
+                font-size: 0.98rem !important;
+                line-height: 1.85 !important;
+            }
+
+            .section {
+                padding: 58px 18px !important;
+            }
+
+            .section-title h2 {
+                font-size: clamp(1.8rem, 8vw, 2.6rem) !important;
+            }
+
+            .card,
+            .price-card {
+                padding: 22px 18px !important;
+                border-radius: 22px !important;
+            }
+
+            .image-panel {
+                border-radius: 22px !important;
+            }
+
+            .image-panel img {
+                min-height: auto !important;
+            }
+
+            .contact-tel {
+                font-size: 1.35rem !important;
+                padding: 13px 20px !important;
+            }
+
+            .cta {
+                padding: 62px 18px !important;
+            }
+        }
+
+        /* さらに小さいスマホ */
+        @media (max-width: 430px) {
+            .top-visual img {
+                aspect-ratio: 16 / 10 !important;
+            }
+
+            .hero-actions {
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+
+            .btn-primary,
+            .btn-secondary {
+                width: 100% !important;
+            }
+        }
+
+    </style>
+</head>
+<body id="top">
+    <header class="header-visible" id="pageHeader">
+        <div class="header-container">
+            <a class="logo" href="index.html">
+                <span class="logo-mark"><span>🏢</span></span>
+                <span class="logo-text">
+                    <span class="logo-sub">AI CAREER NAVI</span>
+                    <span class="logo-main">AIキャリアナビ</span>
+                </span>
+            </a>
+            <nav>
+                <a href="index.html">個人向け</a>
+                <a href="#top">ホーム</a>
+                <a href="#features">活用シーン</a>
+                <a href="#pricing">料金</a>
+                <a href="#contact">お問い合わせ</a>
+                <a href="https://chat.openai.com/" target="_blank" class="btn-header">無料相談</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section class="top-visual">
+            <img src="企業内適任1.png" alt="企業内適任診断 メインビジュアル">
+            <a href="#intro" class="scroll-cue">詳しく見る</a>
+        </section>
+
+        <section class="intro" id="intro">
+            <div class="intro-inner">
+                <span class="badge">For Company</span>
+                <h1>企業内適任診断<br><span>配置・異動・育成の方向性を見える化</span></h1>
+                <p class="lead">社員一人ひとりの強み・志向・実績をもとに、現在の適合度や異動先候補、育成の方向性をAIが整理します。</p>
+                <div class="hero-actions">
+                    <a href="https://chat.openai.com/" target="_blank" class="btn-primary">無料相談を試す</a>
+                    <a href="#features" class="btn-secondary">内容を見る</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="features">
+            <div class="section-inner">
+                <div class="section-title">
+                    <span>POINT</span>
+                    <h2>社員の可能性を、組織の力に変える。</h2>
+                    <p>人材配置や育成の意思決定を、本人の特性とデータの両面からサポートします。</p>
+                </div>
+                <div class="grid-3">
+
+                <div class="card">
+                    <h3>現在の適合度を診断</h3>
+                    <p>今の部署や役割との相性を分かりやすく可視化します。</p>
+                </div>
+
+                <div class="card">
+                    <h3>異動先候補を提案</h3>
+                    <p>強みを活かせる部署や役割の候補を整理します。</p>
+                </div>
+
+                <div class="card">
+                    <h3>育成方針を整理</h3>
+                    <p>今後伸ばすべき能力や、育成の方向性を提案します。</p>
+                </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-inner">
+                <div class="image-grid">
+                    <div class="image-panel">
+                        <img src="企業内適任イメージ.png" alt="企業内適任診断 利用イメージ">
+                    </div>
+                    <div class="card">
+                        <h3>こんな場面におすすめ</h3>
+                        <ul>
+                            <li>社員の配置を見直したい</li>
+<li>若手社員の育成方針を考えたい</li>
+<li>1on1面談の材料がほしい</li>
+<li>異動候補を客観的に整理したい</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <div class="section-inner">
+                <div class="section-title">
+                    <span>RESULT</span>
+                    <h2>診断結果を見える化</h2>
+                    <p>AIとの対話内容をもとに、強み・適性・次に考えるべき方向性を分かりやすく整理します。</p>
+                </div>
+                <div class="image-panel contain">
+                    <img src="企業内適任グラフ.png" alt="企業内適任診断 診断結果イメージ">
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="pricing">
+            <div class="section-inner">
+                <div class="section-title">
+                    <span>PRICE</span>
+                    <h2>料金表</h2>
+                    <p>まずは気軽に始められる個人向けプランです。詳しく相談したい場合は無料相談からお試しください。</p>
+                </div>
+                <div class="grid-3">
+
+                    <div class="price-card">
+                        <h3>ライト</h3>
+                        <p class="price">月額300円</p>
+                        <p>月10回までAI相談。まずは試したい方向け。</p>
+                    </div>
+
+                    <div class="price-card">
+                        <h3>スタンダード</h3>
+                        <p class="price">月額500円</p>
+                        <p>月30回までAI相談。深く自己分析したい方向け。</p>
+                    </div>
+
+                    <div class="price-card">
+                        <h3>プレミアム</h3>
+                        <p class="price">月額980円</p>
+                        <p>無制限AI相談。書類・面接対策まで使いたい方向け。</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" id="contact">
+            <div class="section-inner">
+                <div class="card contact-card">
+                    <h2>お問い合わせ</h2>
+                    <p class="contact-tel">090-8147-0256</p>
+                    <p>企業内適任診断についてのご相談はこちらまでご連絡ください。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta">
+            <h2>人材配置と育成を、もっと科学的に。</h2>
+            <p>社員のキャリア自律と組織の成長を同時に支援します。</p>
+            <a href="https://chat.openai.com/" target="_blank" class="btn-primary">無料相談へ進む</a>
+        </section>
+    </main>
+
+    <script>
+        let lastScrollYForHeader = window.scrollY;
+        const pageHeader = document.getElementById('pageHeader');
+
+        function controlHeaderOnScroll() {
+            const currentY = window.scrollY;
+
+            if (!pageHeader) return;
+
+            if (currentY <= 20) {
+                pageHeader.classList.remove('header-hidden');
+                pageHeader.classList.add('header-visible');
+            } else if (currentY > lastScrollYForHeader && currentY > 120) {
+                pageHeader.classList.add('header-hidden');
+                pageHeader.classList.remove('header-visible');
+            } else if (currentY < lastScrollYForHeader) {
+                pageHeader.classList.remove('header-hidden');
+                pageHeader.classList.add('header-visible');
+            }
+
+            lastScrollYForHeader = currentY;
+        }
+
+        window.addEventListener('scroll', controlHeaderOnScroll, { passive: true });
+        window.addEventListener('load', controlHeaderOnScroll);
+    </script>
+</body>
+</html>

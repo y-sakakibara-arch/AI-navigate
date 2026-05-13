@@ -976,6 +976,310 @@
             }
         }
 
+
+
+        /* 左側サイドフッター／サイドメニュー */
+        .side-footer-nav {
+            position: fixed;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 900;
+            width: 210px;
+            padding: 18px 14px;
+            border-radius: 24px;
+            background: rgba(255, 255, 255, 0.86);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(91, 124, 250, 0.18);
+            box-shadow: 0 24px 70px rgba(16, 32, 64, 0.14);
+        }
+
+        .side-footer-title {
+            font-size: 0.72rem;
+            font-weight: 900;
+            letter-spacing: 0.16em;
+            color: #6374b8;
+            margin: 2px 8px 10px;
+        }
+
+        .side-footer-title.sub {
+            margin-top: 18px;
+        }
+
+        .side-footer-links {
+            display: grid;
+            gap: 8px;
+        }
+
+        .side-footer-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 34px;
+            padding: 9px 12px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: #102040;
+            font-size: 0.86rem;
+            font-weight: 800;
+            line-height: 1.35;
+            background: rgba(244, 246, 255, 0.72);
+            border: 1px solid transparent;
+            transition: transform 0.25s ease, background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .side-footer-links a::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #5b7cfa 0%, #7f9cff 100%);
+            flex-shrink: 0;
+        }
+
+        .side-footer-links a:hover {
+            transform: translateX(4px);
+            color: #33418f;
+            background: #ffffff;
+            border-color: rgba(91, 124, 250, 0.22);
+            box-shadow: 0 10px 24px rgba(91, 124, 250, 0.12);
+        }
+
+        .side-footer-links.diagnosis a {
+            font-size: 0.8rem;
+            background: rgba(238, 244, 255, 0.86);
+        }
+
+        @media (min-width: 1280px) {
+            .hero,
+            .showcase,
+            .free-trial,
+            .contact-section,
+            .service-slide-section {
+                padding-left: 250px;
+            }
+
+            .fixed-main-image {
+                padding-left: 250px;
+            }
+        }
+
+        @media (max-width: 1180px) {
+            .side-footer-nav {
+                left: 50%;
+                top: auto;
+                bottom: 14px;
+                transform: translateX(-50%);
+                width: calc(100% - 28px);
+                max-width: 760px;
+                padding: 10px;
+                border-radius: 22px;
+            }
+
+            .side-footer-title,
+            .side-footer-title.sub {
+                display: none;
+            }
+
+            .side-footer-links {
+                display: flex;
+                gap: 8px;
+                overflow-x: auto;
+                scrollbar-width: none;
+            }
+
+            .side-footer-links::-webkit-scrollbar {
+                display: none;
+            }
+
+            .side-footer-links.diagnosis {
+                margin-top: 8px;
+            }
+
+            .side-footer-links a {
+                white-space: nowrap;
+                flex: 0 0 auto;
+                min-height: 34px;
+                font-size: 0.78rem;
+                padding: 8px 11px;
+            }
+
+            .page-footer {
+                padding-bottom: 140px;
+            }
+        }
+
+
+
+        /* ===== 追加修正：左メニューは左端ホバー時だけ表示 ===== */
+        .side-hover-zone {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 26px;
+            height: 100vh;
+            z-index: 950;
+            background: transparent;
+        }
+
+        .side-hover-zone::after {
+            content: "";
+            position: absolute;
+            left: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 86px;
+            border-radius: 999px;
+            background: rgba(91, 124, 250, 0.45);
+            box-shadow: 0 8px 22px rgba(91, 124, 250, 0.22);
+        }
+
+        .side-footer-nav {
+            left: 18px;
+            opacity: 0;
+            transform: translate(-120%, -50%);
+            pointer-events: none;
+            transition: opacity 0.35s ease, transform 0.35s ease;
+        }
+
+        .side-hover-zone:hover + .side-footer-nav,
+        .side-footer-nav:hover {
+            opacity: 1;
+            transform: translate(0, -50%);
+            pointer-events: auto;
+        }
+
+        /* 左メニューが本文に重ならないようにしていた余白を解除 */
+        @media (min-width: 1280px) {
+            .hero,
+            .showcase,
+            .free-trial,
+            .contact-section,
+            .service-slide-section {
+                padding-left: 24px;
+            }
+
+            .fixed-main-image {
+                padding-left: 22px;
+            }
+        }
+
+        /* ヘッダー：下スクロールで隠れ、上スクロールで表示 */
+        header {
+            transition: transform 0.35s ease, opacity 0.35s ease;
+            will-change: transform;
+        }
+
+        header.header-hidden {
+            transform: translateY(-115%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        header.header-visible {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        /* 4枚スライド：画像が切れないように全体表示 */
+        .service-slider {
+            overflow: visible;
+            background: transparent;
+            box-shadow: none;
+            border: none;
+            padding: 0 76px;
+            height: min(620px, 54vw);
+            min-height: 430px;
+        }
+
+        .service-slide {
+            left: 76px;
+            right: 76px;
+            top: 0;
+            bottom: 0;
+            border-radius: 36px;
+            overflow: hidden;
+            background: #ffffff;
+            box-shadow: 0 34px 100px rgba(16, 32, 64, 0.20);
+            border: 1px solid rgba(91, 124, 250, 0.16);
+        }
+
+        .service-slide img {
+            object-fit: contain;
+            background: #ffffff;
+            padding: 10px;
+        }
+
+        /* 矢印を写真の外側に配置 */
+        .service-slide-btn {
+            background: #ffffff;
+            z-index: 6;
+        }
+
+        .service-slide-btn.prev {
+            left: 8px;
+        }
+
+        .service-slide-btn.next {
+            right: 8px;
+        }
+
+        .service-slide-dots {
+            bottom: -48px;
+        }
+
+        .service-slide-section {
+            padding-bottom: 130px;
+        }
+
+        @media (max-width: 1180px) {
+            .side-hover-zone {
+                display: none;
+            }
+
+            .side-footer-nav {
+                opacity: 1;
+                pointer-events: auto;
+                transform: translateX(-50%);
+            }
+        }
+
+        @media (max-width: 760px) {
+            .service-slider {
+                padding: 0 48px;
+                height: 340px;
+                min-height: 340px;
+            }
+
+            .service-slide {
+                left: 48px;
+                right: 48px;
+                border-radius: 24px;
+            }
+
+            .service-slide img {
+                padding: 6px;
+            }
+
+            .service-slide-btn.prev {
+                left: 0;
+            }
+
+            .service-slide-btn.next {
+                right: 0;
+            }
+
+            .service-slide-dots {
+                bottom: -42px;
+            }
+
+            .service-slide-section {
+                padding-bottom: 112px;
+            }
+        }
+
     </style>
 </head>
 <body id="top">
@@ -1007,6 +1311,30 @@
         </nav>
         </div>
     </header>
+
+    <div class="side-hover-zone" aria-hidden="true"></div>
+    <aside class="side-footer-nav" aria-label="サイドメニュー">
+        <div class="side-footer-title">MENU</div>
+
+        <nav class="side-footer-links">
+            <a href="#top">ホーム</a>
+            <a href="#hero">サービス</a>
+            <a href="#pricing">料金</a>
+            <a href="business.html">法人・教育機関向け</a>
+            <a href="#contact">お問い合わせ</a>
+            <a href="https://chat.openai.com/" target="_blank">無料体験</a>
+        </nav>
+
+        <div class="side-footer-title sub">診断ページ</div>
+
+        <nav class="side-footer-links diagnosis">
+            <a href="university.html">大学・学部診断</a>
+            <a href="job-change.html">就職・転職適職診断</a>
+            <a href="company-fit.html">企業内適任診断</a>
+            <a href="lifestyle.html">趣味・ライフスタイル提案</a>
+        </nav>
+    </aside>
+
 <section class="fixed-main-visual" id="top-visual">
     <div class="fixed-main-image">
         <img src="5e1526f7-91f8-4883-a300-7fa2433f1603.png" alt="AIキャリアナビ メインビジュアル">
@@ -1191,6 +1519,33 @@
 
             setInterval(nextServiceSlide, 4500);
         }
+
+
+
+        let lastScrollYForHeader = window.scrollY;
+        const pageHeader = document.querySelector('header');
+
+        function controlHeaderOnScroll() {
+            const currentY = window.scrollY;
+
+            if (!pageHeader) return;
+
+            if (currentY <= 20) {
+                pageHeader.classList.remove('header-hidden');
+                pageHeader.classList.add('header-visible');
+            } else if (currentY > lastScrollYForHeader && currentY > 120) {
+                pageHeader.classList.add('header-hidden');
+                pageHeader.classList.remove('header-visible');
+            } else if (currentY < lastScrollYForHeader) {
+                pageHeader.classList.remove('header-hidden');
+                pageHeader.classList.add('header-visible');
+            }
+
+            lastScrollYForHeader = currentY;
+        }
+
+        window.addEventListener('scroll', controlHeaderOnScroll, { passive: true });
+        window.addEventListener('load', controlHeaderOnScroll);
 
 </script>
 </body>
